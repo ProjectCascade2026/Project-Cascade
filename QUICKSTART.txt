@@ -1,0 +1,61 @@
+PROJECT CASCADE — QUICK START (2 MINUTES)
+=======================================
+
+REQUIREMENTS:
+  • Python 3.8 or higher
+  • Internet (to download dependencies, one time only)
+
+STEP 1: Save all files from cascade_app_package/ to a folder on your computer
+  Example: ~/cascade-app/
+
+STEP 2: Open terminal/command prompt in that folder
+
+STEP 3: Run launcher (it installs dependencies automatically):
+
+  python3 launcher.py    (macOS/Linux)
+  python launcher.py     (Windows)
+
+STEP 4: Wait for this message:
+
+  📊 Opening Streamlit dashboard at http://localhost:8501
+
+STEP 5: Open browser to:
+
+  http://localhost:8501
+
+DONE! 🎉
+
+---
+
+DAILY USE:
+  1. Run: python3 launcher.py
+  2. Open: http://localhost:8501
+  3. Update your markdown files as you work
+  4. Dashboard auto-refreshes
+  5. Stop: Press Ctrl+C
+
+---
+
+NEED YOUR MARKDOWN FILES?
+  Copy these into the cascade folder:
+  • confluence_state.md
+  • CASCADING_NODES_WATCH_LOG.md
+  • BASELINE_RETURN_FAILURE_RESEARCH_20260818.md
+
+  The app will auto-import them.
+
+---
+
+8 DASHBOARD SECTIONS:
+  ✓ Summary — Key metrics
+  ✓ Today's Progress — Daily updates
+  ✓ Mission and Goals — Framework overview
+  ✓ Amplitude — Escalation tracking
+  ✓ Cascading Nodes — CASCADE sequences
+  ✓ Systematic Underestimation — Metrics
+  ✓ Granularity — Signal details
+  ✓ Appendix — Reference data
+
+---
+
+QUESTIONS? See SETUP.md for detailed instructions.

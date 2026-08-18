@@ -1,0 +1,97 @@
+PROJECT CASCADE STANDALONE APPLICATION
+Package Contents
+===============================================
+
+CORE APPLICATION FILES:
+
+  launcher.py (2.0K)
+    Entry point - starts everything with one command
+    Checks dependencies, initializes database, launches Streamlit
+
+  cascade_app.py (17K)
+    Streamlit dashboard with 8 primary sections
+    Interactive visualizations and data tables
+    Real-time updates from database
+
+  cascade_db.py (6.5K)
+    SQLite database schema and operations
+    Data models for nodes, signals, cascades, reference points
+    Query functions for dashboard
+
+  cascade_importer.py (6.7K)
+    Parses markdown files into database
+    Auto-import on startup and file changes
+    Handles: confluence_state.md, CASCADING_NODES_WATCH_LOG.md, etc.
+
+  cascade_watcher.py (1.9K)
+    File monitoring service
+    Auto-updates database when markdown files change
+    Runs in background while dashboard is active
+
+DOCUMENTATION:
+
+  CASCADE_APP_README.md (4.4K)
+    Architecture overview
+    8 sections explained
+    How to run and use
+
+  SETUP.md (4.9K)
+    Detailed installation guide
+    Step-by-step setup instructions
+    Troubleshooting guide
+
+  QUICKSTART.txt (1.4K)
+    Quick reference for getting started
+    2-minute setup guide
+
+  MANIFEST.txt (this file)
+    File descriptions and package contents
+
+UTILITIES:
+
+  run_cascade.sh (1.2K)
+    Bash launcher script (optional, for macOS/Linux)
+
+===============================================
+
+TOTAL: 9 files, ~1420 lines of code
+
+FILE SIZES (after first run):
+  cascade_data.db     ~50-100 KB (SQLite database - auto-created)
+
+RUNTIME REQUIREMENTS:
+  • Python 3.8+
+  • streamlit
+  • pandas
+  • plotly
+  • watchdog
+
+All dependencies installed automatically by launcher.py
+
+===============================================
+
+TO GET STARTED:
+
+1. Extract all files to a folder on your computer
+2. Put your markdown files (confluence_state.md, etc.) in same folder
+3. Run: python3 launcher.py
+4. Open: http://localhost:8501
+
+See QUICKSTART.txt for immediate 2-minute setup.
+
+===============================================
+
+STABLE ARCHITECTURE:
+
+✓ Data layer (SQLite) separate from UI (Streamlit)
+✓ Each dashboard section is independent
+✓ Changes to one section don't affect others
+✓ Database survives app restarts
+✓ File changes auto-update without restarting
+✓ Fully local - no cloud dependency
+
+===============================================
+
+BUILT: 2026-08-18
+STATUS: Production Ready
+SUPPORT: See SETUP.md for troubleshooting
