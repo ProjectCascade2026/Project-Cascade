@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Import and analyze ALL Gmail messages from all folders
-Cascade signal extraction from any email content
+Cascade signal extraction tied to PROJECT GOALS
 Tracks analyzed messages to avoid duplicates
 
 Frequency: Daily 08:00 AM
@@ -10,7 +10,7 @@ Frequency: Daily 08:00 AM
 import imaplib
 import email
 from email.header import decode_header
-from cascade_db import add_signal, add_finding, is_message_analyzed, mark_message_analyzed
+from cascade_db import add_signal, add_finding, is_message_analyzed, mark_message_analyzed, get_all_goals
 from datetime import datetime
 import configparser
 import os
@@ -63,7 +63,7 @@ def fetch_all_gmail_messages(gmail_user, app_password):
                             try:
                                 msg = email.message_from_bytes(response_part[1])
 
-                                # Extract message ID (use only native Message-ID to avoid duplicates across labels)
+                                # Extract message ID (use only native Message-ID to avoid duplicates)
                                 msg_id = msg.get('Message-ID', None)
                                 if not msg_id:
                                     continue  # Skip emails without Message-ID
@@ -157,53 +157,100 @@ def load_config():
 def extract_cascade_signals(subject, body, author, folder):
     """
     Extract cascade-relevant signals from email content
+    Analysis driven by PROJECT GOALS from database
     """
     signals = []
     findings = []
 
+    # Get project goals from database
+    try:
+        goals = get_all_goals()
+    except:
+        goals = []
+
+    if not goals:
+        return signals, findings
+
     # Combine content for analysis
     content = f"{subject} {body}".lower()
+    content_words = content.split()
 
-    # Cascade keyword detection
-    keywords = {
-        'grid': (2, 'Energy System', 'Power grid incident or energy supply discussion'),
-        'water': (3, 'Water System', 'Water supply or water system incident'),
-        'food': (5, 'Food System', 'Food supply, agriculture, or food security discussion'),
-        'supply chain': (7, 'Economic/Supply Chain', 'Supply chain disruption or logistics issue'),
-        'semiconductor': (6, 'Measurement/Supply Chain', 'Semiconductor shortage or manufacturing issue'),
-        'port': (7, 'Economic/Supply Chain', 'Port congestion or shipping disruption'),
-        'energy': (2, 'Energy System', 'Energy supply or fuel issue'),
-        'inflation': (8, 'Feedback Amplification', 'Price inflation or economic feedback loop'),
-        'climate': (1, 'Climate System', 'Climate event or environmental indicator'),
-        'weather': (1, 'Climate System', 'Extreme weather or meteorological event'),
-        'geopolitical': (10, 'Geopolitical Risk', 'Geopolitical tension or international conflict'),
-        'sanction': (10, 'Geopolitical Risk', 'Economic sanctions or trade restrictions'),
+    # Map goals to cascade nodes and keywords for detection
+    goal_node_mapping = {
+        'cascade': (0, 'Cascade Detection'),
+        'infrastructure': (6, 'Infrastructure System'),
+        'bifurcation': (11, 'Bifurcation Point'),
+        'geographic': (12, 'Geographic Distribution'),
+        'monitor': (6, 'Monitoring System'),
+        'failure': (0, 'System Failure'),
+        'grid': (2, 'Energy System'),
+        'water': (3, 'Water System'),
+        'food': (5, 'Food System'),
+        'supply': (7, 'Economic/Supply Chain'),
+        'energy': (2, 'Energy System'),
+        'climate': (1, 'Climate System'),
+        'geopolitical': (10, 'Geopolitical Risk'),
+        'economic': (8, 'Economic System'),
     }
 
-    for keyword, (node_id, domain, desc) in keywords.items():
-        if keyword in content:
-            signal = {
-                'node': node_id,
-                'domain': domain,
-                'description': f"{desc} - from {author}",
-                'severity': 'warning',
-                'date': datetime.now().strftime('%Y-%m-%d'),
-                'source': f"Gmail: {folder} - {subject[:50]}"
-            }
-            signals.append(signal)
-            break  # One signal per message
+    # Score email relevance to each goal
+    goal_scores = {}
+    for goal in goals:
+        goal_text = goal['goal_text'].lower()
+        score = 0
 
-    # Extract finding if significant content detected
-    if signals and len(body) > 100:
-        # Look for cascade-related language
-        if any(word in content for word in ['cascade', 'amplify', 'fail', 'collapse', 'system']):
-            finding = {
-                'mechanism': 'Cascading System Failure',
-                'text': f"Analysis of cascade-relevant research: {subject}. From {author} in {folder}. Key excerpt: {body[:200]}...",
-                'confidence': 0.75,
-                'evidence': f"Email analysis - {author}"
-            }
-            findings.append(finding)
+        # Check for goal keyword matches
+        for keyword in goal_text.split():
+            if len(keyword) > 3 and keyword in content:
+                score += 1
+
+        goal_scores[goal['goal_id']] = {
+            'goal': goal,
+            'score': score
+        }
+
+    # Extract signals for high-relevance goals
+    high_relevance_goals = [g for g in goal_scores.values() if g['score'] > 0]
+
+    for goal_data in high_relevance_goals:
+        goal = goal_data['goal']
+        score = goal_data['score']
+
+        # Determine node from goal category
+        category = goal.get('category', 'supporting').lower()
+        if 'cascade' in goal['goal_text'].lower():
+            node_id = 0
+        elif 'infrastructure' in goal['goal_text'].lower():
+            node_id = 6
+        elif 'bifurcation' in goal['goal_text'].lower():
+            node_id = 11
+        elif 'geographic' in goal['goal_text'].lower():
+            node_id = 12
+        elif 'monitoring' in goal['goal_text'].lower():
+            node_id = 6
+        else:
+            node_id = 6  # Default to infrastructure
+
+        signal = {
+            'node': node_id,
+            'domain': goal['goal_text'][:50],
+            'description': f"Email analysis relevant to goal: {goal['goal_text'][:60]}... - from {author}",
+            'severity': 'warning' if score < 3 else 'critical',
+            'date': datetime.now().strftime('%Y-%m-%d'),
+            'source': f"Gmail: {folder} - {subject[:50]}"
+        }
+        signals.append(signal)
+
+    # Extract finding if significant relevance and substantial content
+    if signals and len(body) > 150:
+        relevant_goals = ', '.join([g['goal']['goal_text'][:40] for g in high_relevance_goals[:3]])
+        finding = {
+            'mechanism': 'Project Goal Relevance',
+            'text': f"Email from {author} relevant to: {relevant_goals}. Subject: {subject}. Key excerpt: {body[:300]}...",
+            'confidence': min(0.95, 0.7 + (len(signals) * 0.05)),
+            'evidence': f"Email analysis against project goals"
+        }
+        findings.append(finding)
 
     return signals, findings
 
@@ -233,7 +280,7 @@ def main():
 
     for msg in messages_data:
         try:
-            # Extract signals and findings
+            # Extract signals and findings based on project goals
             signals, findings = extract_cascade_signals(msg['subject'], msg['body'], msg['author'], msg['folder'])
 
             # Add to database
