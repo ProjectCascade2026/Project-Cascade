@@ -2888,6 +2888,19 @@ def section_routines():
 
     st.divider()
 
+    st.subheader("Standing Orders")
+
+    st.markdown("""
+    **Persistent Instructions That Apply Across All Sessions:**
+
+    1. **Log all standing orders in this Routines documentation**
+       - Any new standing order must be added to this section
+       - Ensures continuity and visibility of persistent rules
+       - Standing orders are accessible from the live dashboard
+    """)
+
+    st.divider()
+
     st.subheader("Technical Notes")
 
     with st.expander("Routine Configuration Details"):
