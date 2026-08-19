@@ -981,17 +981,6 @@ def section_project_goals():
 
     st.divider()
 
-    st.subheader("Primary Goals")
-    st.markdown("""
-    1. **Systematic Observation** - Document cascade mechanism activation and amplification
-    2. **Signal Integration** - Integrate research findings into framework without artificial delays
-    3. **Baseline Return Tracking** - Monitor post-disaster recovery failures across sectors
-    4. **Early Detection** - Identify cascade sequences before they lock in irreversibly
-    5. **Real-time Monitoring** - Track amplitude, frequency, and interconnectedness metrics
-    """)
-
-    st.divider()
-
     st.subheader("Reference Points")
     ref_points = get_reference_points()
     if ref_points:
