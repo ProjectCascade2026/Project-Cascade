@@ -9,6 +9,8 @@ import pandas as pd
 import plotly.graph_objects as go
 import plotly.express as px
 from datetime import datetime, timedelta
+import subprocess
+import os
 from cascade_db import (
     get_all_nodes, get_all_signals, get_cascade_sequences,
     get_reference_points, get_baseline_failures, get_metrics_summary,
@@ -2613,6 +2615,42 @@ def section_bifurcation_point():
     The bifurcation exists in the mathematics of the problem, not the uncertainty of the future.
     """)
 
+# ============================================
+# ROUTINE EXECUTION HELPERS
+# ============================================
+
+def execute_routine(script_name, routine_name):
+    """Execute a routine script and display output"""
+    try:
+        script_path = os.path.join(os.getcwd(), script_name)
+
+        if not os.path.exists(script_path):
+            st.error(f"Script not found: {script_path}")
+            return
+
+        st.info(f"Executing {routine_name}...")
+
+        result = subprocess.run(
+            ["python", script_path],
+            capture_output=True,
+            text=True,
+            timeout=120
+        )
+
+        if result.returncode == 0:
+            st.success(f"✅ {routine_name} completed successfully")
+            with st.expander("Show execution output"):
+                st.code(result.stdout, language="text")
+        else:
+            st.error(f"⚠️ {routine_name} completed with errors")
+            with st.expander("Show error output"):
+                st.code(result.stderr, language="text")
+
+    except subprocess.TimeoutExpired:
+        st.error(f"⏱️ {routine_name} timed out (exceeded 120 seconds)")
+    except Exception as e:
+        st.error(f"Error executing {routine_name}: {str(e)}")
+
 def section_routines():
     """Automated routines and scanning tasks that run in the background"""
     st.header("🤖 Automated Routines")
@@ -2649,6 +2687,13 @@ def section_routines():
     - No credentials needed (public news sources)
     """)
 
+    col1, col2, col3 = st.columns([3, 1, 1])
+    with col2:
+        if st.button("▶️ Run Now", key="run_routine_0"):
+            execute_routine("import_daily_news_headlines.py", "Daily News Headline Scan")
+    with col3:
+        st.write("")
+
     st.divider()
 
     # Routine 1: Daily Substack Import
@@ -2678,6 +2723,13 @@ def section_routines():
     - Scheduler: Windows Task Scheduler task "Import Substack Emails"
     - Last Run: Manual test successful (connection verified)
     """)
+
+    col1, col2, col3 = st.columns([3, 1, 1])
+    with col2:
+        if st.button("▶️ Run Now", key="run_routine_1"):
+            execute_routine("import_substack_imap.py", "Substack Email Import")
+    with col3:
+        st.write("")
 
     st.divider()
 
@@ -2714,6 +2766,13 @@ def section_routines():
     - No credentials needed (public institutional APIs)
     """)
 
+    col1, col2, col3 = st.columns([3, 1, 1])
+    with col2:
+        if st.button("▶️ Run Now", key="run_routine_2"):
+            execute_routine("import_institutional_data.py", "Institutional Data Import")
+    with col3:
+        st.write("")
+
     st.divider()
 
     # Routine 3: Daily Critical Infrastructure Monitoring
@@ -2748,6 +2807,13 @@ def section_routines():
     - Scheduler: Windows Task Scheduler task "Daily Infrastructure Monitoring"
     - Data refresh: Daily 09:00 AM (frequency sufficient for infrastructure-scale changes)
     """)
+
+    col1, col2, col3 = st.columns([3, 1, 1])
+    with col2:
+        if st.button("▶️ Run Now", key="run_routine_3"):
+            execute_routine("import_daily_infrastructure.py", "Daily Infrastructure Monitoring")
+    with col3:
+        st.write("")
 
     st.divider()
 
