@@ -165,12 +165,12 @@ def generate_infrastructure_signals_from_goals():
         return signals, findings
 
     except Exception as e:
-        print(f"[WARNING] Infrastructure monitoring error (non-critical): {e}")
+        print(f"Infrastructure monitoring error (non-critical): {e}")
         return signals, findings
 
 def main():
     print("\n" + "="*60)
-    print("[INFRASTRUCTURE] Daily Critical Infrastructure Monitoring")
+    print("Daily Critical Infrastructure Monitoring")
     print("="*60)
 
     # Generate signals based on project goals

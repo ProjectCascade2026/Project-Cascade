@@ -41,14 +41,14 @@ def import_cascade_nodes():
 
     conn.commit()
     conn.close()
-    print(f"[YES] Imported {len(NODES)} cascade nodes")
+    print(f"Imported {len(NODES)} cascade nodes")
 
 def import_from_confluence_state():
     """Parse confluence_state.md for reference points and system state"""
     state_file = CONFLUENCE_DIR / 'confluence_state.md'
 
     if not state_file.exists():
-        print("[WARNING] confluence_state.md not found")
+        print("confluence_state.md not found")
         return
 
     content = state_file.read_text(encoding='utf-8')
@@ -73,14 +73,14 @@ def import_from_confluence_state():
 
     conn.commit()
     conn.close()
-    print("[YES] Imported reference points from confluence_state.md")
+    print("Imported reference points from confluence_state.md")
 
 def import_cascade_sequences():
     """Parse CASCADING_NODES_WATCH_LOG.md for CASCADE sequences"""
     watch_file = CONFLUENCE_DIR / 'CASCADING_NODES_WATCH_LOG.md'
 
     if not watch_file.exists():
-        print("[WARNING] CASCADING_NODES_WATCH_LOG.md not found")
+        print("CASCADING_NODES_WATCH_LOG.md not found")
         return
 
     content = watch_file.read_text(encoding='utf-8')
@@ -107,14 +107,14 @@ def import_cascade_sequences():
 
     conn.commit()
     conn.close()
-    print(f"[YES] Imported {len(cascades)} CASCADE sequences")
+    print(f"Imported {len(cascades)} CASCADE sequences")
 
 def import_baseline_failures():
     """Parse BASELINE_RETURN_FAILURE_RESEARCH_20260818.md"""
     baseline_file = CONFLUENCE_DIR / 'BASELINE_RETURN_FAILURE_RESEARCH_20260818.md'
 
     if not baseline_file.exists():
-        print("[WARNING] Baseline failure research file not found")
+        print("Baseline failure research file not found")
         return
 
     content = baseline_file.read_text(encoding='utf-8')
@@ -134,14 +134,14 @@ def import_baseline_failures():
 
     conn.commit()
     conn.close()
-    print(f"[YES] Imported baseline return failure data")
+    print(f"Imported baseline return failure data")
 
 def import_signals_from_confluence():
     """Extract all signals from confluence_state.md and other markdown files"""
     confluence_file = CONFLUENCE_DIR / 'confluence_state.md'
 
     if not confluence_file.exists():
-        print("[WARNING] confluence_state.md not found")
+        print("confluence_state.md not found")
         return
 
     content = confluence_file.read_text(encoding='utf-8')
@@ -241,11 +241,11 @@ def import_signals_from_confluence():
                           'confluence_state.md', 'active'))
                 signal_count += 1
             except Exception as e:
-                print(f"[WARNING] Error inserting signal for Node {node_id}: {e}")
+                print(f"Error inserting signal for Node {node_id}: {e}")
 
     conn.commit()
     conn.close()
-    print(f"[YES] Imported {signal_count} signals from confluence_state.md")
+    print(f"Imported {signal_count} signals from confluence_state.md")
     return signal_count
 
 
@@ -448,7 +448,7 @@ def import_amplitude_watch():
     amp_file = CONFLUENCE_DIR / 'AMPLITUDE_WATCH_LOG.md'
 
     if not amp_file.exists():
-        print("[WARNING] AMPLITUDE_WATCH_LOG.md not found")
+        print("AMPLITUDE_WATCH_LOG.md not found")
         return 0
 
     content = amp_file.read_text(encoding='utf-8')
@@ -502,7 +502,7 @@ def import_amplitude_watch():
                               confidence, risk_threshold, measurement, breakpoint, evidence, status))
                     watch_count += 1
                 except Exception as e:
-                    print(f"[WARNING] Error importing Node {current_node} amplitude watch: {e}")
+                    print(f"Error importing Node {current_node} amplitude watch: {e}")
 
             # Start new node section
             current_node = int(node_match.group(1))
@@ -544,11 +544,11 @@ def import_amplitude_watch():
                       confidence, risk_threshold, measurement, breakpoint, evidence, status))
             watch_count += 1
         except Exception as e:
-            print(f"[WARNING] Error importing Node {current_node} amplitude watch: {e}")
+            print(f"Error importing Node {current_node} amplitude watch: {e}")
 
     conn.commit()
     conn.close()
-    print(f"[YES] Imported {watch_count} amplitude watch entries")
+    print(f"Imported {watch_count} amplitude watch entries")
     return watch_count
 
 
@@ -606,9 +606,9 @@ def import_daily_findings():
                      VALUES (?, ?, ?, ?, ?)''',
                   (date_str, overview, findings_json, methodological_json, theoretical_json))
         conn.commit()
-        print(f"[YES] Imported daily findings for {date_str}")
+        print(f"Imported daily findings for {date_str}")
     except Exception as e:
-        print(f"[WARNING] Error importing daily findings: {e}")
+        print(f"Error importing daily findings: {e}")
     finally:
         conn.close()
 
@@ -921,11 +921,11 @@ def import_systematic_underestimations():
                        f['factor'], f['actual_vs_predicted'], f['evidence'], f['source'], 'active'))
             count += 1
         except Exception as e:
-            print(f"[WARNING] Error adding underestimation finding: {e}")
+            print(f"Error adding underestimation finding: {e}")
 
     conn.commit()
     conn.close()
-    print(f"[YES] Imported {count} systematic underestimation findings")
+    print(f"Imported {count} systematic underestimation findings")
     return count
 
 def import_research_findings():
@@ -1081,11 +1081,11 @@ def import_research_findings():
                        f['signals'], 'active'))
             count += 1
         except Exception as e:
-            print(f"[WARNING] Error adding research finding: {e}")
+            print(f"Error adding research finding: {e}")
 
     conn.commit()
     conn.close()
-    print(f"[YES] Imported {count} research findings across 8 mechanisms")
+    print(f"Imported {count} research findings across 8 mechanisms")
     return count
 
 def import_august_2026_signals():
@@ -1155,11 +1155,11 @@ def import_august_2026_signals():
                        signal['severity'], signal['date'], signal['source'], 'active'))
             count += 1
         except Exception as e:
-            print(f"[WARNING] Error adding signal: {e}")
+            print(f"Error adding signal: {e}")
 
     conn.commit()
     conn.close()
-    print(f"[YES] Imported {count} signals from August 2026 headline scan")
+    print(f"Imported {count} signals from August 2026 headline scan")
     return count
 
 def import_reference_points():
@@ -1199,9 +1199,9 @@ def import_reference_points():
             add_reference_point(point['metric'], point['value'], point['category'], point['date'])
             count += 1
         except Exception as e:
-            print(f"[WARNING] Error adding reference point: {e}")
+            print(f"Error adding reference point: {e}")
 
-    print(f"[YES] Imported {count} system robustness reference points")
+    print(f"Imported {count} system robustness reference points")
     return count
 
 def initialize_and_import():
@@ -1209,7 +1209,7 @@ def initialize_and_import():
     print("\n[START] Starting Project Cascade Database...\n")
 
     init_db()
-    print("[YES] Database schema initialized")
+    print("Database schema initialized")
 
     # Check if database already has data
     conn = get_connection()

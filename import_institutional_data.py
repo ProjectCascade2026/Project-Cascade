@@ -165,12 +165,12 @@ def generate_institutional_signals_from_goals():
         return signals, findings
 
     except Exception as e:
-        print(f"[WARNING] Institutional data import error (non-critical): {e}")
+        print(f"Institutional data import error (non-critical): {e}")
         return signals, findings
 
 def main():
     print("\n" + "="*60)
-    print("[INSTITUTIONAL] Weekly Institutional Data Synthesis")
+    print("Weekly Institutional Data Synthesis")
     print("="*60)
 
     # Generate signals based on project goals

@@ -96,7 +96,7 @@ def generate_cascade_signals_from_goals():
 
 def main():
     print("\n" + "="*60)
-    print("[NEWS] Daily News Headline Scan")
+    print("Daily News Headline Scan")
     print("="*60 + "\n")
 
     # Generate signals based on project goals

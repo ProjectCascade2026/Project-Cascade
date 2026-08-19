@@ -38,7 +38,7 @@ def fetch_all_gmail_messages(gmail_user, app_password):
         # Connect to Gmail
         mail = imaplib.IMAP4_SSL('imap.gmail.com')
         mail.login(gmail_user, app_password)
-        print(f"[OK] Authenticated as {gmail_user}")
+        print(f"Authenticated as {gmail_user}")
 
         # Get all folders
         status, mailbox_list = mail.list()
@@ -131,15 +131,15 @@ def fetch_all_gmail_messages(gmail_user, app_password):
         mail.close()
         mail.logout()
 
-        print(f"[OK] Scanned {folders_scanned} folders")
-        print(f"[OK] Found {len(messages_data)} unanalyzed messages")
+        print(f"Scanned {folders_scanned} folders")
+        print(f"Found {len(messages_data)} unanalyzed messages")
         return messages_data
 
     except imaplib.IMAP4.error as e:
-        print(f"[ERROR] IMAP error: {e}")
+        print(f"IMAP error: {e}")
         return []
     except Exception as e:
-        print(f"[ERROR] Error: {e}")
+        print(f"Error: {e}")
         return []
 
 def load_config():
@@ -147,7 +147,7 @@ def load_config():
     config = configparser.ConfigParser()
 
     if not os.path.exists('config.ini'):
-        print("[ERROR] config.ini not found")
+        print("config.ini not found")
         print("   Create config.ini with:")
         print("   [gmail]")
         print("   email = your.email@gmail.com")
@@ -160,7 +160,7 @@ def load_config():
         app_password = config.get('gmail', 'app_password')
         return gmail_user, app_password
     except:
-        print("[ERROR] Invalid config.ini format")
+        print("Invalid config.ini format")
         return None, None
 
 def extract_cascade_signals(subject, body, author, folder):
@@ -265,7 +265,7 @@ def extract_cascade_signals(subject, body, author, folder):
 
 def main():
     print("\n" + "="*60)
-    print("[EMAIL] Analyzing All Gmail Messages")
+    print("Analyzing All Gmail Messages")
     print("="*60 + "\n")
 
     # Load credentials
