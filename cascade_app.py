@@ -339,61 +339,7 @@ def section_today_progress():
         st.info(f"No daily findings recorded for {today_str}. Add entries to `daily_findings.md` to get started.")
 
 # ============================================
-# 3. MISSION AND GOALS
-# ============================================
-def section_mission_goals():
-    st.header("🎯 Mission and Goals")
-
-    st.subheader("Framework")
-    st.markdown("""
-    **Project Cascade** tracks 13 mechanisms documenting how constrained systems fail sequentially.
-
-    **13 Cascade Nodes:**
-    1. Water Bankruptcy
-    2. Regulatory Capture
-    3. Institutional Suppression
-    4. Rate of Change
-    5. Thresholds Becoming Floors
-    6. Measurement Capacity Erosion
-    7. Economic Depletion
-    8. Infrastructure Brittleness
-    9. Scenario Planning Collapse
-    10. Coordination Cascade Failure
-    11. Infrastructure Built for Still Climate
-    12. Adaptation Exhaustion
-    13. Change/Adaptation Lag
-    """)
-
-    st.divider()
-
-    st.subheader("Primary Goals")
-    st.markdown("""
-    1. **Systematic Observation** - Document cascade mechanism activation and amplification
-    2. **Signal Integration** - Integrate research findings into framework without artificial delays
-    3. **Baseline Return Tracking** - Monitor post-disaster recovery failures across sectors
-    4. **Early Detection** - Identify cascade sequences before they lock in irreversibly
-    5. **Real-time Monitoring** - Track amplitude, frequency, and interconnectedness metrics
-    """)
-
-    st.divider()
-
-    st.subheader("Reference Points")
-    ref_points = get_reference_points()
-    if ref_points:
-        # Get latest values for each metric
-        metrics_latest = {}
-        for rp in ref_points:
-            metric = rp['metric_name']
-            if metric not in metrics_latest or rp['date_recorded'] > metrics_latest[metric]['date_recorded']:
-                metrics_latest[metric] = rp
-
-        for metric, data in metrics_latest.items():
-            st.metric(metric, f"{data['value']:.1f}")
-    else:
-        st.info("No reference points recorded yet")
-
-# ============================================
-# 4. AMPLITUDE
+# 3. AMPLITUDE (formerly 4)
 # ============================================
 def section_amplitude():
     st.header("⚡ Amplitude Watch Log")
@@ -1009,6 +955,57 @@ def section_project_goals():
     Track and visualize forces and mechanisms that contribute to cascading failure and/or critical capacity
     thresholds across earth systems and human institutions.
     """)
+
+    st.divider()
+
+    # Framework section (from former Mission and Goals page)
+    st.subheader("Framework")
+    st.markdown("""
+    **Project Cascade** tracks 13 mechanisms documenting how constrained systems fail sequentially.
+
+    **13 Cascade Nodes:**
+    1. Water Bankruptcy
+    2. Regulatory Capture
+    3. Institutional Suppression
+    4. Rate of Change
+    5. Thresholds Becoming Floors
+    6. Measurement Capacity Erosion
+    7. Economic Depletion
+    8. Infrastructure Brittleness
+    9. Scenario Planning Collapse
+    10. Coordination Cascade Failure
+    11. Infrastructure Built for Still Climate
+    12. Adaptation Exhaustion
+    13. Change/Adaptation Lag
+    """)
+
+    st.divider()
+
+    st.subheader("Primary Goals")
+    st.markdown("""
+    1. **Systematic Observation** - Document cascade mechanism activation and amplification
+    2. **Signal Integration** - Integrate research findings into framework without artificial delays
+    3. **Baseline Return Tracking** - Monitor post-disaster recovery failures across sectors
+    4. **Early Detection** - Identify cascade sequences before they lock in irreversibly
+    5. **Real-time Monitoring** - Track amplitude, frequency, and interconnectedness metrics
+    """)
+
+    st.divider()
+
+    st.subheader("Reference Points")
+    ref_points = get_reference_points()
+    if ref_points:
+        # Get latest values for each metric
+        metrics_latest = {}
+        for rp in ref_points:
+            metric = rp['metric_name']
+            if metric not in metrics_latest or rp['date_recorded'] > metrics_latest[metric]['date_recorded']:
+                metrics_latest[metric] = rp
+
+        for metric, data in metrics_latest.items():
+            st.metric(metric, f"{data['value']:.1f}")
+    else:
+        st.info("No reference points recorded yet")
 
     st.divider()
 
@@ -3055,7 +3052,6 @@ def main():
             "Bifurcation Point",
             "Summary",
             "System Mechanism Tracker",
-            "Mission and Goals",
             "Amplitude",
             "Cascading Nodes Visualizing",
             "Systematic Underestimation",
@@ -3093,8 +3089,6 @@ def main():
         section_system_mechanism_tracker()
     elif selected == "Project Goals":
         section_project_goals()
-    elif selected == "Mission and Goals":
-        section_mission_goals()
     elif selected == "Amplitude":
         section_amplitude()
     elif selected == "Cascading Nodes Visualizing":
