@@ -1140,7 +1140,7 @@ def section_project_goals():
 
                 with col3:
                     if st.button("🗑️", key=f"retire_{goal['goal_id']}", help="Retire goal"):
-                        retire_goal(goal['goal_id'], f"Retired on {datetime.now().strftime('%Y-%m-%d')}")
+                        retire_goal(goal['goal_id'], notes=f"Retired on {datetime.now().strftime('%Y-%m-%d')}")
                         st.rerun()
 
             # Edit mode
@@ -1150,10 +1150,11 @@ def section_project_goals():
                     st.divider()
                     st.subheader("Edit Goal")
 
-                    edited_text = st.text_area("Goal Text", value=goal_to_edit['goal_text'], height=100)
+                    edited_text = st.text_area("Goal Text", value=goal_to_edit['goal_text'], height=100, key=f"goal_text_{goal_to_edit['goal_id']}")
                     edited_category = st.selectbox("Category",
                                                    ["primary", "secondary", "supporting", "monitoring"],
-                                                   index=["primary", "secondary", "supporting", "monitoring"].index(goal_to_edit['category'].lower()))
+                                                   index=["primary", "secondary", "supporting", "monitoring"].index(goal_to_edit['category'].lower()),
+                                                   key=f"goal_cat_{goal_to_edit['goal_id']}")
 
                     col1, col2 = st.columns(2)
                     with col1:
@@ -1208,7 +1209,8 @@ def section_project_goals():
 
         new_category = st.selectbox(
             "Category",
-            ["primary", "secondary", "supporting", "monitoring"]
+            ["primary", "secondary", "supporting", "monitoring"],
+            key="new_goal_category"
         )
 
         if st.button("➕ Add Goal", type="primary"):
