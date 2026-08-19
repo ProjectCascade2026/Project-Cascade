@@ -1055,7 +1055,7 @@ def section_project_goals():
                     edited_text = st.text_area("Goal Text", value=goal_to_edit['goal_text'], height=100)
                     edited_category = st.selectbox("Category",
                                                    ["primary", "secondary", "supporting", "monitoring"],
-                                                   index=["primary", "secondary", "supporting", "monitoring"].index(goal_to_edit['category']))
+                                                   index=["primary", "secondary", "supporting", "monitoring"].index(goal_to_edit['category'].lower()))
 
                     col1, col2 = st.columns(2)
                     with col1:
