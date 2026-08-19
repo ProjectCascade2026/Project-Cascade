@@ -4,8 +4,17 @@ Import and analyze ALL Gmail messages from all folders
 Cascade signal extraction tied to PROJECT GOALS
 Tracks analyzed messages to avoid duplicates
 
-Frequency: Daily 08:00 AM
+Frequency: Hourly at :48 minutes past each hour (UTC)
 """
+
+import sys
+import subprocess
+
+# Ensure required packages are available (install if missing in cloud environment)
+try:
+    from imap_tools import MailBox
+except ImportError:
+    subprocess.check_call([sys.executable, "-m", "pip", "install", "imap-tools", "-q"])
 
 import imaplib
 import email

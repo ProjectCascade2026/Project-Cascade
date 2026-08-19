@@ -2,17 +2,26 @@
 """
 Import cascade-relevant data from institutional APIs
 Analysis driven by PROJECT GOALS
-Weekly synthesis from:
+Daily synthesis from:
 - NASA Earthdata
 - NOAA Climate Data Online
 - World Bank Open Data
 - FAO Food Systems indicators
 - CGIAR Research Data
 
-Frequency: Monday 10:00 AM
+Frequency: Daily 09:00 AM UTC
 """
 
-import requests
+import sys
+import subprocess
+
+# Ensure requests is available (install if missing in cloud environment)
+try:
+    import requests
+except ImportError:
+    subprocess.check_call([sys.executable, "-m", "pip", "install", "requests", "-q"])
+    import requests
+
 import json
 from datetime import datetime, timedelta
 from cascade_db import add_signal, add_finding, get_all_goals

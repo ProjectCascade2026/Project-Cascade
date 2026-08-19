@@ -9,10 +9,19 @@ Integrates multiple infrastructure data sources:
 - Water stress indicators
 - Grid/infrastructure incidents
 
-Frequency: Daily 09:00 AM
+Frequency: Daily 09:00 AM UTC
 """
 
-import requests
+import sys
+import subprocess
+
+# Ensure requests is available (install if missing in cloud environment)
+try:
+    import requests
+except ImportError:
+    subprocess.check_call([sys.executable, "-m", "pip", "install", "requests", "-q"])
+    import requests
+
 import json
 from datetime import datetime, timedelta
 from cascade_db import add_signal, add_finding, get_all_goals
