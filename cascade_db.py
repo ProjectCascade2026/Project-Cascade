@@ -151,6 +151,18 @@ def init_db():
         status TEXT DEFAULT 'active'
     )''')
 
+    # Gmail Message Tracking (for Routine 1 - all emails analysis)
+    c.execute('''CREATE TABLE IF NOT EXISTS gmail_messages_analyzed (
+        message_id TEXT PRIMARY KEY,
+        folder TEXT,
+        sender TEXT,
+        subject TEXT,
+        date_received TIMESTAMP,
+        signals_extracted INTEGER DEFAULT 0,
+        findings_extracted INTEGER DEFAULT 0,
+        date_analyzed TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    )''')
+
     conn.commit()
     conn.close()
 
@@ -791,6 +803,39 @@ def update_goal(goal_id, goal_text=None, category=None, notes=None):
         conn.commit()
 
     conn.close()
+
+# ============================================
+# GMAIL MESSAGE TRACKING (Routine 1)
+# ============================================
+
+def is_message_analyzed(message_id):
+    """Check if a Gmail message has already been analyzed"""
+    conn = get_connection()
+    c = conn.cursor()
+    c.execute('SELECT 1 FROM gmail_messages_analyzed WHERE message_id = ?', (message_id,))
+    result = c.fetchone() is not None
+    conn.close()
+    return result
+
+def mark_message_analyzed(message_id, folder, sender, subject, date_received, signals_count=0, findings_count=0):
+    """Mark a Gmail message as analyzed"""
+    conn = get_connection()
+    c = conn.cursor()
+    c.execute('''INSERT OR IGNORE INTO gmail_messages_analyzed
+                 (message_id, folder, sender, subject, date_received, signals_extracted, findings_extracted)
+                 VALUES (?, ?, ?, ?, ?, ?, ?)''',
+              (message_id, folder, sender, subject, date_received, signals_count, findings_count))
+    conn.commit()
+    conn.close()
+
+def get_analyzed_messages_count():
+    """Get total number of analyzed messages"""
+    conn = get_connection()
+    c = conn.cursor()
+    c.execute('SELECT COUNT(*) FROM gmail_messages_analyzed')
+    count = c.fetchone()[0]
+    conn.close()
+    return count
 
 if __name__ == '__main__':
     init_db()
