@@ -248,17 +248,27 @@ def section_today_progress():
     # Get today's signals and findings from routines
     all_signals = get_all_signals()
     all_findings = get_all_findings()
-    todays_signals = [s for s in all_signals if s['date_recorded'][:10] == today_str]
-    todays_findings = [f for f in all_findings if f['date_discovered'][:10] == today_str]
+
+    # Flexible date matching - handle various timestamp formats
+    todays_signals = [s for s in all_signals if (
+        str(s.get('date_recorded', ''))[:10] == today_str or
+        str(s.get('date_recorded', '')).startswith(today_str)
+    )]
+    todays_findings = [f for f in all_findings if (
+        str(f.get('date_discovered', ''))[:10] == today_str or
+        str(f.get('date_discovered', '')).startswith(today_str)
+    )]
 
     # Display routine-collected data
-    col1, col2, col3 = st.columns(3)
+    col1, col2, col3, col4 = st.columns(4)
     with col1:
-        st.metric("Signals Collected", len(todays_signals))
+        st.metric("Today's Signals", len(todays_signals))
     with col2:
-        st.metric("Findings Extracted", len(todays_findings))
+        st.metric("Today's Findings", len(todays_findings))
     with col3:
-        st.metric("Mechanisms Activated", len(set(f['mechanism'] for f in todays_findings)))
+        st.metric("Mechanisms Activated", len(set(f['mechanism'] for f in todays_findings)) if todays_findings else 0)
+    with col4:
+        st.metric("Total in System", len(all_signals))
 
     if todays_signals:
         with st.expander("📊 Today's Signals by Source", expanded=False):
@@ -395,7 +405,21 @@ def section_today_progress():
         st.caption(f"📝 Last updated: {findings_data['last_updated']}")
     else:
         if not todays_signals and not todays_findings:
-            st.info("No signals or findings collected yet today. Routines will populate this automatically when they run.")
+            st.info("No signals or findings matched today's date. Routines will populate this when they run.")
+
+            # Fallback: Show recent signals if date matching failed
+            if all_signals:
+                st.divider()
+                st.subheader("📊 Recent Signals (Last 20) — Debug Fallback")
+                st.caption("Showing recent data in case date format mismatched")
+
+                recent_signals = all_signals[:20]
+                for signal in recent_signals:
+                    severity_color = {'critical': '🔴', 'serious': '🟠', 'warning': '🟡'}.get(signal.get('severity'), '⚪')
+                    date_recorded = signal.get('date_recorded', 'unknown')
+                    st.caption(f"{severity_color} [{date_recorded}] {signal.get('domain', 'Unknown')}: {signal.get('description', '')[:100]}...")
+
+                st.caption("If you see Gmail results above, the date format may need adjustment. Check the timestamp format in the database.")
 
 # ============================================
 # 3. AMPLITUDE (formerly 4)
