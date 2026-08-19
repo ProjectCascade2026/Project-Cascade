@@ -466,52 +466,6 @@ def get_amplitude_watch_by_status(status):
 # PROJECT GOALS MANAGEMENT
 # ============================================
 
-def get_all_goals(status_filter=None):
-    """Get all project goals, optionally filtered by status"""
-    conn = get_connection()
-    conn.row_factory = sqlite3.Row
-    c = conn.cursor()
-
-    if status_filter:
-        c.execute('SELECT * FROM project_goals WHERE status = ? ORDER BY created_date DESC', (status_filter,))
-    else:
-        c.execute('SELECT * FROM project_goals ORDER BY created_date DESC')
-
-    goals = [dict(row) for row in c.fetchall()]
-    conn.close()
-    return goals
-
-def add_goal(goal_text, category='primary'):
-    """Add a new project goal"""
-    conn = get_connection()
-    c = conn.cursor()
-    c.execute('''INSERT INTO project_goals (goal_text, category, status)
-                 VALUES (?, ?, ?)''',
-              (goal_text, category, 'active'))
-    conn.commit()
-    goal_id = c.lastrowid
-    conn.close()
-    return goal_id
-
-def update_goal(goal_id, goal_text, category=None):
-    """Update an existing goal"""
-    conn = get_connection()
-    c = conn.cursor()
-
-    if category:
-        c.execute('''UPDATE project_goals
-                     SET goal_text = ?, category = ?, amended_date = CURRENT_TIMESTAMP
-                     WHERE goal_id = ?''',
-                  (goal_text, category, goal_id))
-    else:
-        c.execute('''UPDATE project_goals
-                     SET goal_text = ?, amended_date = CURRENT_TIMESTAMP
-                     WHERE goal_id = ?''',
-                  (goal_text, goal_id))
-
-    conn.commit()
-    conn.close()
-
 def retire_goal(goal_id, notes=''):
     """Retire a goal (mark as inactive)"""
     conn = get_connection()
@@ -767,15 +721,6 @@ def get_all_goals(status='active'):
     goals = [dict(row) for row in c.fetchall()]
     conn.close()
     return goals
-
-def update_goal_status(goal_id, status):
-    """Update project goal status"""
-    conn = get_connection()
-    c = conn.cursor()
-    c.execute('UPDATE project_goals SET status = ?, amended_date = CURRENT_TIMESTAMP WHERE goal_id = ?',
-              (status, goal_id))
-    conn.commit()
-    conn.close()
 
 def update_goal(goal_id, goal_text=None, category=None, notes=None):
     """Update an existing project goal"""
