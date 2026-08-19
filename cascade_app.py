@@ -3041,6 +3041,14 @@ def section_routines():
        - Any new standing order must be added to this section
        - Ensures continuity and visibility of persistent rules
        - Standing orders are accessible from the live dashboard
+
+    2. **Keep cascade_app.py documentation synchronized with actual routine execution**
+       - Treat cascade_app.py as the source of truth for routine configuration
+       - Whenever any routine changes (frequency, trigger ID, data source, status), update BOTH:
+         * The corresponding routine's markdown section in this page
+         * The summary table showing all routines at a glance
+       - This ensures the documentation always reflects actual cloud execution
+       - Changes to routines should prompt immediate updates to this page
     """)
 
     st.divider()
