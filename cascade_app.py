@@ -2620,6 +2620,37 @@ def section_routines():
 
     st.subheader("Active Routines")
 
+    # Routine 0: Daily News Headline Scan (first in sequence)
+    st.write("### 📰 Routine 0: Daily News Headline Scan")
+    col1, col2, col3 = st.columns([2, 1, 1])
+    with col1:
+        st.write("**Early Warning Monitoring**")
+    with col2:
+        st.write("Daily")
+    with col3:
+        st.write("07:00 AM")
+
+    st.markdown("""
+    **Data Source:** Multi-source news headline aggregation (infrastructure, geopolitical, supply chain)
+
+    **What It Does:**
+    - Scans news headlines for infrastructure incidents (grid failures, port disruptions, water system events)
+    - Monitors geopolitical events (sanctions, conflicts, trade restrictions)
+    - Detects supply chain incidents (logistics delays, manufacturing disruptions)
+    - Maps incidents to cascade nodes
+    - Adds early warning signals to research findings
+
+    **Cascade Value:** Provides 24-hour early detection of infrastructure failures vs. 2-3 week detection via data APIs. Single infrastructure incident (major grid outage, port closure) cascades across dependent systems within hours.
+
+    **Status:** ✅ Ready to Deploy
+    - Script: `import_daily_news_headlines.py`
+    - Setup: `setup_daily_news_scheduler.ps1` (creates Windows Task)
+    - Scheduler: Windows Task Scheduler task "Daily News Headline Scan"
+    - No credentials needed (public news sources)
+    """)
+
+    st.divider()
+
     # Routine 1: Daily Substack Import
     st.write("### 📧 Routine 1: Daily Substack Email Import")
     col1, col2, col3 = st.columns([2, 1, 1])
@@ -2736,14 +2767,15 @@ def section_routines():
         st.markdown("""
         | Routine | Frequency | Time | Sources | Status |
         |---------|-----------|------|---------|--------|
+        | News Headline Scan | Daily | 07:00 AM | Multi-source news | ✅ Ready to Deploy |
         | Substack Email | Daily | 08:00 AM | 10 researchers | ✅ Active |
         | Infrastructure Monitoring | Daily | 09:00 AM | FAO, markets, ports, water | ✅ Ready to Build |
         | Institutional Data | Weekly | Mon 10:00 AM | 5 APIs | ✅ Ready |
         """)
 
     with col2:
-        st.metric("Total Routines", "3")
-        st.metric("Daily Updates", "2x per day")
+        st.metric("Total Routines", "4")
+        st.metric("Daily Updates", "3x per day")
 
     st.divider()
 
@@ -2795,22 +2827,26 @@ def section_routines():
     **Your Requests → My Implementation:**
 
     1. **"Actually using Substack emails to feed research into the dashboard"**
-       → Built `import_substack_imap.py` + Gmail IMAP integration + daily scheduler (Routine 1)
+       → Built `import_substack_imap.py` + Gmail IMAP integration + daily scheduler (Routine 1, 08:00 AM)
 
     2. **"Real-time/ongoing monitoring of critical infrastructure developments globally with cascade implications"**
        → Built daily infrastructure monitoring pipeline (food, commodities, ports, water, grids) at 09:00 AM (Routine 3)
+       → Added news headline scan for early warning of infrastructure incidents (Routine 0, 07:00 AM)
        → Note: Daily frequency is operationally sufficient; real-time exceeds project scope
 
     3. **"This should not require your involvement"**
-       → Created fully automated scheduling (Windows Task Scheduler, zero manual runs for all 3 routines)
+       → Created fully automated scheduling (Windows Task Scheduler, zero manual runs for all 4 routines)
 
     4. **"Create a page documenting all the automated things/routines/searches/etc"**
        → Built this Routines page showing complete system architecture for all automated workflows
 
     5. **"Can we have API-based data imports instead of webpage fetching?"**
-       → Built `import_institutional_data.py` with direct API connections to 5 major institutions (Routine 2)
+       → Built `import_institutional_data.py` with direct API connections to 5 major institutions (Routine 3, weekly)
 
-    6. **"Try to be more proactive, I have no idea what you can do!"**
+    6. **"Add a daily 7 am news headline scan"**
+       → Built `import_daily_news_headlines.py` with multi-source news monitoring for early warning (Routine 0, 07:00 AM)
+
+    7. **"Try to be more proactive, I have no idea what you can do!"**
        → Now actively architecting and building all automation systems you'll need
     """)
 
