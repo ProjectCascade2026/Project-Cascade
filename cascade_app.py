@@ -25,6 +25,63 @@ from cascade_db import (
 )
 import json
 
+# ============================================
+# Initialize Project Goals (Session 7)
+# ============================================
+@st.cache_resource
+def initialize_project_goals():
+    """
+    Initialize project goals at app startup.
+    Adds the 6 new goals from Session 7 if they don't already exist.
+    This function runs only once per app restart due to @st.cache_resource.
+    """
+    try:
+        # Check current goals
+        existing_goals = get_all_goals() or []
+        existing_count = len(existing_goals)
+
+        # Only add goals if we have fewer than 7 (1 existing + 6 new)
+        if existing_count < 7:
+            new_goals = [
+                {
+                    "text": "Detect cascading system failures across global critical infrastructure before collapse becomes inevitable through autonomous multi-source monitoring",
+                    "category": "primary"
+                },
+                {
+                    "text": "Daily monitoring of critical infrastructure developments globally (food, commodities, ports, water, energy, geopolitics) with cascade implications",
+                    "category": "primary"
+                },
+                {
+                    "text": "Establish and maintain 4-routine autonomous data pipeline: news headlines, researcher perspectives, real-time infrastructure monitoring, institutional synthesis",
+                    "category": "supporting"
+                },
+                {
+                    "text": "Document all automated routines, data sources, and system architecture for transparency and cross-session continuity",
+                    "category": "supporting"
+                },
+                {
+                    "text": "Identify bifurcation points—moments when systems cross from recoverable stress to permanent failure—enabling early intervention",
+                    "category": "supporting"
+                },
+                {
+                    "text": "Map geographic bifurcation: track which regions survive infrastructure cascades vs. collapse based on self-sufficiency and dependencies",
+                    "category": "supporting"
+                }
+            ]
+
+            for goal_data in new_goals:
+                try:
+                    add_goal(
+                        goal_text=goal_data["text"],
+                        category=goal_data["category"]
+                    )
+                except Exception as e:
+                    pass  # Silently skip duplicates or errors
+
+        return True
+    except Exception as e:
+        return False
+
 # Page config
 st.set_page_config(
     page_title="Project Cascade",
@@ -3181,6 +3238,9 @@ def section_routines():
 # MAIN APP
 # ============================================
 def main():
+    # Initialize project goals on app startup
+    initialize_project_goals()
+
     # Sidebar navigation
     with st.sidebar:
         st.title("Project Cascade")
