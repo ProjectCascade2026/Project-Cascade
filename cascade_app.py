@@ -111,38 +111,42 @@ def section_summary():
     st.divider()
 
     # Meta-Summary: State of the Planet
-    st.subheader("🌐 State of the Planet — Meta-Assessment")
+    try:
+        st.subheader("State of the Planet — Meta-Assessment")
 
-    # Generate dynamic meta-summary
-    active_mechanisms = len([n for n in nodes_by_activity if n['signal_count'] and n['signal_count'] > 0])
-    total_signals = metrics['total_signals']
-    robustness_value = next((rp['value'] for rp in reference_points if 'Robustness' in rp['metric_name']), 0)
-    hotspot_count = len(hotspots)
-    cascade_count = metrics['cascade_sequences']
+        # Generate dynamic meta-summary with safe fallbacks
+        active_mechanisms = len([n for n in nodes_by_activity if n.get('signal_count') and n['signal_count'] > 0]) if nodes_by_activity else 0
+        total_signals = metrics.get('total_signals', 0) if metrics else 0
+        robustness_value = next((float(rp.get('value', 0)) for rp in reference_points if rp and 'Robustness' in rp.get('metric_name', '')), 0) if reference_points else 0
+        hotspot_count = len(hotspots) if hotspots else 0
+        cascade_count = metrics.get('cascade_sequences', 0) if metrics else 0
 
-    # Determine urgency level based on metrics
-    if robustness_value < 40 or active_mechanisms >= 10:
-        urgency = "CRITICAL"
-        urgency_color = "🔴"
-    elif robustness_value < 60 or active_mechanisms >= 8:
-        urgency = "HIGH"
-        urgency_color = "🟠"
-    else:
-        urgency = "ELEVATED"
-        urgency_color = "🟡"
+        # Determine urgency level based on metrics
+        if robustness_value < 40 or active_mechanisms >= 10:
+            urgency = "CRITICAL"
+            urgency_indicator = "[CRITICAL]"
+        elif robustness_value < 60 or active_mechanisms >= 8:
+            urgency = "HIGH"
+            urgency_indicator = "[HIGH]"
+        else:
+            urgency = "ELEVATED"
+            urgency_indicator = "[ELEVATED]"
 
-    meta_summary = f"""
-    {urgency_color} **Urgency Level: {urgency}** | {active_mechanisms} active cascade mechanisms | System robustness at {robustness_value:.0f}%
+        meta_summary = f"""
+        **Urgency Level: {urgency_indicator}** | {active_mechanisms} active cascade mechanisms | System robustness at {robustness_value:.0f}%
 
-    Planetary systems show persistent degradation across {active_mechanisms} tracked failure mechanisms. {total_signals} documented signals
-    reveal {cascade_count} active cascade sequences with confirmed real-world activation. Geographic concentration in {hotspot_count} hotspots indicates
-    regional tipping points approaching. Infrastructure brittleness, supply chain fragility, and measurement capacity erosion amplify
-    feedback loops. Economic depletion reducing adaptive capacity. System unable to return to baseline—baseline itself shifting.
-    Institutional coordination failures compound response lags. Current trajectory suggests critical threshold crossings likely within 2-3 years.
-    """
+        Planetary systems show persistent degradation across {active_mechanisms} tracked failure mechanisms. {total_signals} documented signals
+        reveal {cascade_count} active cascade sequences with confirmed real-world activation. Geographic concentration in {hotspot_count} hotspots indicates
+        regional tipping points approaching. Infrastructure brittleness, supply chain fragility, and measurement capacity erosion amplify
+        feedback loops. Economic depletion reducing adaptive capacity. System unable to return to baseline—baseline itself shifting.
+        Institutional coordination failures compound response lags. Current trajectory suggests critical threshold crossings likely within 2-3 years.
+        """
 
-    st.markdown(meta_summary)
-    st.caption("Last updated: " + datetime.now().strftime("%Y-%m-%d %H:%M UTC") + " | Assessment based on active signal patterns and cascade node activation")
+        st.markdown(meta_summary)
+        st.caption("Last updated: " + datetime.now().strftime("%Y-%m-%d %H:%M UTC") + " | Assessment based on active signal patterns and cascade node activation")
+
+    except Exception as e:
+        st.warning(f"Meta-assessment temporarily unavailable: {str(e)}")
 
     st.divider()
 
