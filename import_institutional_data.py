@@ -138,7 +138,7 @@ def fetch_world_bank_indicators():
     Fetch World Bank development indicators
     Tracks infrastructure, economic resilience, food security indices
     """
-    print("\n🏦 Fetching World Bank Indicators...")
+    print("\n[BANK] Fetching World Bank Indicators...")
 
     signals = []
     findings = []
@@ -197,7 +197,7 @@ def fetch_fao_food_indicators():
     Fetch FAO food security and agricultural data
     Tracks production, prices, supply, nutritional status
     """
-    print("\n🌾 Fetching FAO Food Systems Data...")
+    print("\n[CROPS] Fetching FAO Food Systems Data...")
 
     signals = []
     findings = []
@@ -226,7 +226,7 @@ def fetch_fao_food_indicators():
 
         finding = {
             'mechanism': 'Feedback Amplification & Supply Chain Fragility',
-            'text': 'FAO data reveals feedback loops in global food systems: fertilizer price shocks (Russia/Ukraine disruptions) → reduced application → yield decline → price spikes → hoarding behavior → supply collapse. Bifurcation threshold: 8-9 weeks of global grain buffer. One coordinated disruption (sanctions + climate + hoarding) triggers famine conditions in vulnerable regions within 60 days.',
+            'text': 'FAO data reveals feedback loops in global food systems: fertilizer price shocks (Russia/Ukraine disruptions) -> reduced application -> yield decline -> price spikes -> hoarding behavior -> supply collapse. Bifurcation threshold: 8-9 weeks of global grain buffer. One coordinated disruption (sanctions + climate + hoarding) triggers famine conditions in vulnerable regions within 60 days.',
             'confidence': 0.94,
             'evidence': 'FAO Food Price Index, GIEWS Early Warning System'
         }
@@ -361,9 +361,9 @@ def import_institutional_data():
 
     print("\n" + "="*60)
     print(f"[OK] Institutional Data Import Complete!")
-    print(f"   • Signals added: {signal_count}")
-    print(f"   • Findings added: {finding_count}")
-    print(f"   • Total entries: {signal_count + finding_count}")
+    print(f"   - Signals added: {signal_count}")
+    print(f"   - Findings added: {finding_count}")
+    print(f"   - Total entries: {signal_count + finding_count}")
     print("="*60 + "\n")
 
     return signal_count, finding_count

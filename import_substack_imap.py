@@ -201,11 +201,11 @@ def main():
     signal_count, finding_count = import_substack_signals(emails_data)
 
     print(f"\n[OK] Import Complete!")
-    print(f"   • Signals added: {signal_count}")
-    print(f"   • Findings added: {finding_count}")
-    print(f"   • Total entries: {signal_count + finding_count}")
+    print(f"   - Signals added: {signal_count}")
+    print(f"   - Findings added: {finding_count}")
+    print(f"   - Total entries: {signal_count + finding_count}")
     print("\n" + "="*60)
-    print("\n🎯 Next: Check your dashboard at")
+    print("\n[TARGET] Next: Check your dashboard at")
     print("   https://project-cascade-strangelove.streamlit.app/")
     print("\n" + "="*60 + "\n")
 

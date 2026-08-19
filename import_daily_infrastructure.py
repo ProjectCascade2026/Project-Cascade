@@ -106,7 +106,7 @@ def fetch_commodity_prices():
 
         finding = {
             'mechanism': 'Feedback Amplification',
-            'text': 'Daily commodity price monitoring reveals feedback loops: fertilizer price spikes (geopolitical, supply shock) → reduced application in developing regions → yield decline 6-8 weeks later → grain price spike → food insecurity → geopolitical cascade. Price volatility >15% daily indicates emerging supply shock.',
+            'text': 'Daily commodity price monitoring reveals feedback loops: fertilizer price spikes (geopolitical, supply shock) -> reduced application in developing regions -> yield decline 6-8 weeks later -> grain price spike -> food insecurity -> geopolitical cascade. Price volatility >15% daily indicates emerging supply shock.',
             'confidence': 0.91,
             'evidence': 'World Bank Commodity Price API, historical price volatility patterns'
         }
@@ -337,9 +337,9 @@ def import_daily_infrastructure():
 
     print("\n" + "="*60)
     print(f"[OK] Daily Infrastructure Monitoring Complete!")
-    print(f"   • Signals added: {signal_count}")
-    print(f"   • Findings added: {finding_count}")
-    print(f"   • Total entries: {signal_count + finding_count}")
+    print(f"   - Signals added: {signal_count}")
+    print(f"   - Findings added: {finding_count}")
+    print(f"   - Total entries: {signal_count + finding_count}")
     print("="*60 + "\n")
 
     return signal_count, finding_count

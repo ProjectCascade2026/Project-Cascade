@@ -60,7 +60,7 @@ def fetch_infrastructure_news():
 
         finding = {
             'mechanism': 'Cascading System Failure & Early Warning Detection',
-            'text': 'Daily news scanning provides early warning of infrastructure incidents that cascade within hours: grid outage → water pump failure → fuel station offline → supply chain disruption. Single infrastructure failure in critical hub (major port, power grid node, semiconductor fab) triggers 2-3 week cascade across dependent systems. News monitoring enables detection within 24 hours vs. 2-3 weeks for data-driven detection.',
+            'text': 'Daily news scanning provides early warning of infrastructure incidents that cascade within hours: grid outage -> water pump failure -> fuel station offline -> supply chain disruption. Single infrastructure failure in critical hub (major port, power grid node, semiconductor fab) triggers 2-3 week cascade across dependent systems. News monitoring enables detection within 24 hours vs. 2-3 weeks for data-driven detection.',
             'confidence': 0.88,
             'evidence': 'Historical infrastructure incident cascade patterns, news-to-impact timeline analysis'
         }
@@ -80,7 +80,7 @@ def fetch_grid_incidents():
     """
     Monitor major power grid failures and energy incidents
     """
-    print("\n⚡ Monitoring Power Grid & Energy Incidents...")
+    print("\n[POWER] Monitoring Power Grid & Energy Incidents...")
 
     signals = []
     findings = []
@@ -105,7 +105,7 @@ def fetch_grid_incidents():
 
         finding = {
             'mechanism': 'Cascading System Failure',
-            'text': 'Grid failures cascade rapidly: major generation loss or transmission failure → voltage instability → cascading blackout → water treatment offline → fuel pumping offline → telecommunications down → supply chain coordination collapse. Multi-hour outage in interconnected grid creates 1-2 week recovery period with cascading impacts. Daily monitoring enables early detection.',
+            'text': 'Grid failures cascade rapidly: major generation loss or transmission failure -> voltage instability -> cascading blackout -> water treatment offline -> fuel pumping offline -> telecommunications down -> supply chain coordination collapse. Multi-hour outage in interconnected grid creates 1-2 week recovery period with cascading impacts. Daily monitoring enables early detection.',
             'confidence': 0.95,
             'evidence': 'Interconnected grid topology, historical outage cascade analysis'
         }
@@ -126,7 +126,7 @@ def fetch_supply_chain_incidents():
     Monitor major supply chain disruptions
     Ports, logistics, semiconductor incidents
     """
-    print("\n📦 Monitoring Supply Chain Incidents...")
+    print("\n[PACKAGE] Monitoring Supply Chain Incidents...")
 
     signals = []
     findings = []
@@ -152,7 +152,7 @@ def fetch_supply_chain_incidents():
 
         finding = {
             'mechanism': 'Economic Depletion & Supply Chain Fragility',
-            'text': 'Port or logistics hub disruption cascades through supply networks: 2-week port closure → delayed container movements → manufacturing input shortages 3-4 weeks later → production delays → inventory depletion in dependent regions. Semiconductor fab incident creates 6-8 week global shortage. Supply chain monitoring enables early detection vs. delayed market signals.',
+            'text': 'Port or logistics hub disruption cascades through supply networks: 2-week port closure -> delayed container movements -> manufacturing input shortages 3-4 weeks later -> production delays -> inventory depletion in dependent regions. Semiconductor fab incident creates 6-8 week global shortage. Supply chain monitoring enables early detection vs. delayed market signals.',
             'confidence': 0.91,
             'evidence': 'Supply chain delay propagation models, historical incident analysis'
         }
@@ -199,7 +199,7 @@ def fetch_geopolitical_events():
 
         finding = {
             'mechanism': 'Coordination Failure & Bifurcation Risk',
-            'text': 'Geopolitical events create cascading infrastructure impacts: sanctions on energy-exporting region → energy prices spike → fertilizer production costs rise → fertilizer exports restricted → agricultural production falls 1 year later → food prices spike → geopolitical instability intensifies. Concurrent sanctions on multiple critical materials (semiconductors, rare earths, fertilizer) create synchronized cascade across multiple sectors.',
+            'text': 'Geopolitical events create cascading infrastructure impacts: sanctions on energy-exporting region -> energy prices spike -> fertilizer production costs rise -> fertilizer exports restricted -> agricultural production falls 1 year later -> food prices spike -> geopolitical instability intensifies. Concurrent sanctions on multiple critical materials (semiconductors, rare earths, fertilizer) create synchronized cascade across multiple sectors.',
             'confidence': 0.86,
             'evidence': 'Historical sanction impact cascades, trade disruption analysis'
         }
@@ -252,7 +252,7 @@ def import_daily_news():
     signal_count = 0
     finding_count = 0
 
-    print("\n📝 Adding to database...\n")
+    print("\n[NOTES] Adding to database...\n")
 
     for signal in all_signals:
         try:
@@ -284,9 +284,9 @@ def import_daily_news():
 
     print("\n" + "="*60)
     print(f"[OK] Daily News Headline Scan Complete!")
-    print(f"   • Signals added: {signal_count}")
-    print(f"   • Findings added: {finding_count}")
-    print(f"   • Total entries: {signal_count + finding_count}")
+    print(f"   - Signals added: {signal_count}")
+    print(f"   - Findings added: {finding_count}")
+    print(f"   - Total entries: {signal_count + finding_count}")
     print("="*60 + "\n")
 
     return signal_count, finding_count
