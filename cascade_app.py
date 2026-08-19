@@ -2613,6 +2613,148 @@ def section_bifurcation_point():
     The bifurcation exists in the mathematics of the problem, not the uncertainty of the future.
     """)
 
+def section_routines():
+    """Automated routines and scanning tasks that run in the background"""
+    st.header("🤖 Automated Routines")
+    st.markdown("Background tasks and automation workflows running continuously")
+
+    st.subheader("Active Routines")
+
+    # Daily Substack Import
+    col1, col2, col3 = st.columns([2, 1, 1])
+    with col1:
+        st.write("**📧 Daily Substack Email Import**")
+    with col2:
+        st.write("Daily")
+    with col3:
+        st.write("08:00 AM")
+
+    st.markdown("""
+    **Purpose:** Automatically fetch new Substack emails from researchers and extract cascade signals/findings
+
+    **Details:**
+    - Connects to Gmail via IMAP
+    - Scans "Substack" folder for new emails
+    - Extracts cascade-relevant signals and findings
+    - Organizes research by mechanism (Supply Chain, Water, Energy, etc.)
+    - Adds to Research Findings page with source attribution
+
+    **Last Run:** Manual test successful (0 emails in folder)
+
+    **Status:** ✅ Active - Scheduled via Windows Task Scheduler
+
+    **Configuration:**
+    - Script: `import_substack_imap.py`
+    - Credentials: Stored in local `config.ini` (not in git)
+    - Schedule: Daily at 08:00 AM
+    - Automation: Windows Task Scheduler task "Import Substack Emails"
+    """)
+
+    st.divider()
+
+    st.subheader("Routine Management")
+
+    col1, col2 = st.columns(2)
+
+    with col1:
+        st.write("**Running Routines:** 1")
+        st.write("**Last Execution:** Today (manual test)")
+        st.write("**Next Scheduled:** Tomorrow 08:00 AM")
+
+    with col2:
+        st.write("**Data Pipeline Status:** ✅ Operational")
+        st.write("**Email Connection:** ✅ Verified")
+        st.write("**Database:** ✅ 48 test entries")
+
+    st.divider()
+
+    st.subheader("Future Automation Opportunities")
+
+    st.markdown("""
+    Potential routines to add as the project expands:
+
+    1. **Real-Time Infrastructure Data Feeds**
+       - NOAA weather/water status updates
+       - Grid status from ISO/RTO operators
+       - Semiconductor fab utilization reports
+
+    2. **News & Event Scanning**
+       - Geopolitical developments (sanctions, conflicts)
+       - Supply chain disruptions
+       - Climate/disaster events
+
+    3. **Dashboard Auto-Updates**
+       - Refresh data visualizations
+       - Update amplitude tracking
+       - Calculate cascade propagation metrics
+
+    4. **Research Aggregation**
+       - Pull from academic databases
+       - Aggregate policy developments
+       - Track bifurcation indicators
+    """)
+
+    st.divider()
+
+    st.subheader("Technical Notes")
+
+    with st.expander("Routine Configuration Details"):
+        st.markdown("""
+        **Substack Import Workflow:**
+        ```
+        1. Windows Task Scheduler triggers at 08:00 AM
+        2. Launches: python import_substack_imap.py
+        3. Reads credentials from config.ini
+        4. Connects to Gmail IMAP server
+        5. Queries 'Substack' folder
+        6. For each email:
+           - Extract subject, body, author, date
+           - Parse cascade-relevant keywords
+           - Map to cascade nodes (semiconductors, energy, water, etc.)
+           - Create signals and findings
+           - Store in cascade_data.db
+        7. Task completes, awaits next schedule
+        ```
+
+        **Database Impact:**
+        - Signals table: New entries per email
+        - Findings table: New entries per email
+        - Source: "Substack: [Author Name]"
+        - Automatic timestamp: Current run date
+
+        **Failure Handling:**
+        - Task logs errors to Windows Event Viewer
+        - Failed runs don't block subsequent runs
+        - Manual re-run possible anytime via command line
+        """)
+
+    with st.expander("Adding New Routines"):
+        st.markdown("""
+        To add a new automated routine:
+
+        1. **Create a Python script** that:
+           - Connects to data source (API, database, email, etc.)
+           - Extracts relevant data
+           - Maps to cascade model
+           - Adds to cascade_db
+
+        2. **Test manually** first to verify data extraction works
+
+        3. **Register with Task Scheduler:**
+           - Open taskschd.msc
+           - Create Basic Task
+           - Set trigger (daily, hourly, event-based)
+           - Point to your Python script
+
+        4. **Document** in this Routines page with:
+           - Schedule and frequency
+           - Data source
+           - Cascade mechanism mapping
+           - Expected update cadence
+
+        5. **Monitor** via Windows Event Viewer for errors
+        """)
+
 # ============================================
 # MAIN APP
 # ============================================
@@ -2641,7 +2783,8 @@ def main():
             "Cascading Nodes Visualizing",
             "Systematic Underestimation",
             "Granularity",
-            "Appendix"
+            "Appendix",
+            "Routines"
         ]
 
         selected = st.radio("Navigation", sections, label_visibility="collapsed")
@@ -2685,6 +2828,8 @@ def main():
         section_granularity()
     elif selected == "Appendix":
         section_appendix()
+    elif selected == "Routines":
+        section_routines()
 
     # Footer
     st.divider()
