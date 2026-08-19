@@ -63,8 +63,12 @@ def fetch_all_gmail_messages(gmail_user, app_password):
                             try:
                                 msg = email.message_from_bytes(response_part[1])
 
-                                # Extract message ID
-                                msg_id = msg.get('Message-ID', f"{folder_name}_{email_id.decode()}").strip('<>')
+                                # Extract message ID (use only native Message-ID to avoid duplicates across labels)
+                                msg_id = msg.get('Message-ID', None)
+                                if not msg_id:
+                                    continue  # Skip emails without Message-ID
+
+                                msg_id = msg_id.strip('<>')
 
                                 # Skip if already analyzed
                                 if is_message_analyzed(msg_id):
