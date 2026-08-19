@@ -2970,6 +2970,7 @@ def main():
         st.markdown("---")
 
         sections = [
+            "Today's Progress",
             "Research Findings",
             "Project Goals",
             "System Dynamics",
@@ -2981,7 +2982,6 @@ def main():
             "Policy Gap Analysis",
             "Bifurcation Point",
             "Summary",
-            "Today's Progress",
             "System Mechanism Tracker",
             "Mission and Goals",
             "Amplitude",
