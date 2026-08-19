@@ -27,7 +27,7 @@ def fetch_fao_giews_alerts():
     Fetch FAO Global Information and Early Warning System alerts
     Tracks food security crises, crop failures, price spikes
     """
-    print("\n🚨 Fetching FAO GIEWS Food Security Alerts...")
+    print("\n[ALERT] Fetching FAO GIEWS Food Security Alerts...")
 
     signals = []
     findings = []
@@ -36,8 +36,8 @@ def fetch_fao_giews_alerts():
         # FAO GIEWS API for food security alerts
         giews_url = "https://www.fao.org/giews/food-prices/tool/public/api/alerts"
 
-        print("   ✅ FAO GIEWS connection ready")
-        print("   📊 Available alert streams:")
+        print("   [OK] FAO GIEWS connection ready")
+        print("   [DATA] Available alert streams:")
         print("      - Food security crisis alerts")
         print("      - Crop failure alerts by region")
         print("      - Price spike warnings")
@@ -65,7 +65,7 @@ def fetch_fao_giews_alerts():
         return signals, findings
 
     except Exception as e:
-        print(f"   ⚠️  FAO GIEWS error (non-critical): {e}")
+        print(f"   [WARNING]  FAO GIEWS error (non-critical): {e}")
         return signals, findings
 
 # ============================================
@@ -77,7 +77,7 @@ def fetch_commodity_prices():
     Fetch daily commodity market snapshot
     Tracks grain, fertilizer, and energy prices
     """
-    print("\n💰 Fetching Commodity Market Prices...")
+    print("\n[PRICE] Fetching Commodity Market Prices...")
 
     signals = []
     findings = []
@@ -86,8 +86,8 @@ def fetch_commodity_prices():
         # World Bank Commodity Price API
         commodity_url = "https://data.worldbank.org/api/v2/country/WLD/indicator/CPEXT"
 
-        print("   ✅ Commodity market data connection ready")
-        print("   📊 Available price streams:")
+        print("   [OK] Commodity market data connection ready")
+        print("   [DATA] Available price streams:")
         print("      - Grain prices (wheat, corn, rice)")
         print("      - Fertilizer prices (nitrogen, phosphate, potash)")
         print("      - Energy prices (crude oil, natural gas)")
@@ -115,7 +115,7 @@ def fetch_commodity_prices():
         return signals, findings
 
     except Exception as e:
-        print(f"   ⚠️  Commodity market error (non-critical): {e}")
+        print(f"   [WARNING]  Commodity market error (non-critical): {e}")
         return signals, findings
 
 # ============================================
@@ -127,14 +127,14 @@ def fetch_port_congestion():
     Fetch global port congestion and shipping delays
     Monitors logistics bottlenecks
     """
-    print("\n⛴️ Fetching Port Congestion Data...")
+    print("\n[PORT] Fetching Port Congestion Data...")
 
     signals = []
     findings = []
 
     try:
-        print("   ✅ Port monitoring systems connection ready")
-        print("   📊 Available data streams:")
+        print("   [OK] Port monitoring systems connection ready")
+        print("   [DATA] Available data streams:")
         print("      - Major port utilization (Shanghai, Rotterdam, Singapore)")
         print("      - Container ship delays")
         print("      - Shipping cost indices")
@@ -162,7 +162,7 @@ def fetch_port_congestion():
         return signals, findings
 
     except Exception as e:
-        print(f"   ⚠️  Port monitoring error (non-critical): {e}")
+        print(f"   [WARNING]  Port monitoring error (non-critical): {e}")
         return signals, findings
 
 # ============================================
@@ -174,14 +174,14 @@ def fetch_water_stress():
     Fetch global water stress indicators
     Monitors drought conditions and water availability
     """
-    print("\n💧 Fetching Water Stress Indicators...")
+    print("\n[WATER] Fetching Water Stress Indicators...")
 
     signals = []
     findings = []
 
     try:
-        print("   ✅ Water stress monitoring connection ready")
-        print("   📊 Available data streams:")
+        print("   [OK] Water stress monitoring connection ready")
+        print("   [DATA] Available data streams:")
         print("      - Regional water stress indices")
         print("      - Drought condition monitoring")
         print("      - Reservoir levels by region")
@@ -209,7 +209,7 @@ def fetch_water_stress():
         return signals, findings
 
     except Exception as e:
-        print(f"   ⚠️  Water stress error (non-critical): {e}")
+        print(f"   [WARNING]  Water stress error (non-critical): {e}")
         return signals, findings
 
 # ============================================
@@ -221,14 +221,14 @@ def fetch_infrastructure_incidents():
     Fetch major infrastructure outages and incidents
     Monitors grid failures, water system events, supply disruptions
     """
-    print("\n⚡ Fetching Infrastructure Incident Alerts...")
+    print("\n[POWER] Fetching Infrastructure Incident Alerts...")
 
     signals = []
     findings = []
 
     try:
-        print("   ✅ Infrastructure incident monitoring ready")
-        print("   📊 Available alert streams:")
+        print("   [OK] Infrastructure incident monitoring ready")
+        print("   [DATA] Available alert streams:")
         print("      - Power grid outages (regional)")
         print("      - Water system failures")
         print("      - Supply chain disruptions")
@@ -256,7 +256,7 @@ def fetch_infrastructure_incidents():
         return signals, findings
 
     except Exception as e:
-        print(f"   ⚠️  Infrastructure incident error (non-critical): {e}")
+        print(f"   [WARNING]  Infrastructure incident error (non-critical): {e}")
         return signals, findings
 
 # ============================================
@@ -269,7 +269,7 @@ def import_daily_infrastructure():
     Aggregates signals and findings from all sources
     """
     print("\n" + "="*60)
-    print("🌍 Daily Critical Infrastructure Monitoring")
+    print("[GLOBAL] Daily Critical Infrastructure Monitoring")
     print("   Food Security, Commodities, Ports, Water, Infrastructure")
     print("="*60)
 
@@ -305,7 +305,7 @@ def import_daily_infrastructure():
     signal_count = 0
     finding_count = 0
 
-    print("\n📝 Adding to database...\n")
+    print("\n[NOTES] Adding to database...\n")
 
     for signal in all_signals:
         try:
@@ -318,9 +318,9 @@ def import_daily_infrastructure():
                 signal['source']
             )
             signal_count += 1
-            print(f"   ✅ Signal: {signal['domain']}")
+            print(f"   [OK] Signal: {signal['domain']}")
         except Exception as e:
-            print(f"   ⚠️  Error adding signal from {signal['domain']}: {e}")
+            print(f"   [WARNING]  Error adding signal from {signal['domain']}: {e}")
 
     for finding in all_findings:
         try:
@@ -331,12 +331,12 @@ def import_daily_infrastructure():
                 supporting_evidence=finding['evidence']
             )
             finding_count += 1
-            print(f"   ✅ Finding: {finding['mechanism']}")
+            print(f"   [OK] Finding: {finding['mechanism']}")
         except Exception as e:
-            print(f"   ⚠️  Error adding finding: {e}")
+            print(f"   [WARNING]  Error adding finding: {e}")
 
     print("\n" + "="*60)
-    print(f"✅ Daily Infrastructure Monitoring Complete!")
+    print(f"[OK] Daily Infrastructure Monitoring Complete!")
     print(f"   • Signals added: {signal_count}")
     print(f"   • Findings added: {finding_count}")
     print(f"   • Total entries: {signal_count + finding_count}")

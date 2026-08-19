@@ -28,7 +28,7 @@ def fetch_infrastructure_news():
     Scan news headlines for infrastructure incidents
     Uses free news APIs with cascade-relevant keywords
     """
-    print("\n📰 Scanning News Headlines for Infrastructure Events...")
+    print("\n[NEWS] Scanning News Headlines for Infrastructure Events...")
 
     signals = []
     findings = []
@@ -37,8 +37,8 @@ def fetch_infrastructure_news():
         # NewsAPI.org free tier (requires API key, but has generous free tier)
         # Alternative: Use RSS feeds from major news outlets (no key needed)
 
-        print("   ✅ News monitoring connection ready")
-        print("   📊 Available alert streams:")
+        print("   [OK] News monitoring connection ready")
+        print("   [STREAMS] Available alert streams:")
         print("      - Power grid failures and outages")
         print("      - Water system disruptions")
         print("      - Port congestion and shipping delays")
@@ -69,7 +69,7 @@ def fetch_infrastructure_news():
         return signals, findings
 
     except Exception as e:
-        print(f"   ⚠️  News monitoring error (non-critical): {e}")
+        print(f"   [WARNING] News monitoring error (non-critical): {e}")
         return signals, findings
 
 # ============================================
@@ -86,8 +86,8 @@ def fetch_grid_incidents():
     findings = []
 
     try:
-        print("   ✅ Grid incident monitoring ready")
-        print("   📊 Available alert streams:")
+        print("   [OK] Grid incident monitoring ready")
+        print("   [STREAMS] Available alert streams:")
         print("      - Regional grid outages")
         print("      - Major power generation failures")
         print("      - Renewable energy capacity changes")
@@ -114,7 +114,7 @@ def fetch_grid_incidents():
         return signals, findings
 
     except Exception as e:
-        print(f"   ⚠️  Grid incident error (non-critical): {e}")
+        print(f"   [WARNING] Grid incident error (non-critical): {e}")
         return signals, findings
 
 # ============================================
@@ -132,8 +132,8 @@ def fetch_supply_chain_incidents():
     findings = []
 
     try:
-        print("   ✅ Supply chain incident monitoring ready")
-        print("   📊 Available alert streams:")
+        print("   [OK] Supply chain incident monitoring ready")
+        print("   [STREAMS] Available alert streams:")
         print("      - Port closures and facility damage")
         print("      - Major transportation accidents")
         print("      - Logistics hub disruptions")
@@ -161,7 +161,7 @@ def fetch_supply_chain_incidents():
         return signals, findings
 
     except Exception as e:
-        print(f"   ⚠️  Supply chain incident error (non-critical): {e}")
+        print(f"   [WARNING] Supply chain incident error (non-critical): {e}")
         return signals, findings
 
 # ============================================
@@ -173,14 +173,14 @@ def fetch_geopolitical_events():
     Monitor major geopolitical events with infrastructure impact
     Sanctions, conflicts, trade restrictions
     """
-    print("\n🌍 Monitoring Geopolitical Events...")
+    print("\n[GLOBAL] Monitoring Geopolitical Events...")
 
     signals = []
     findings = []
 
     try:
-        print("   ✅ Geopolitical monitoring ready")
-        print("   📊 Available alert streams:")
+        print("   [OK] Geopolitical monitoring ready")
+        print("   [STREAMS] Available alert streams:")
         print("      - Sanctions and trade restrictions")
         print("      - Military conflicts (infrastructure impact)")
         print("      - Border closures")
@@ -208,7 +208,7 @@ def fetch_geopolitical_events():
         return signals, findings
 
     except Exception as e:
-        print(f"   ⚠️  Geopolitical monitoring error (non-critical): {e}")
+        print(f"   [WARNING] Geopolitical monitoring error (non-critical): {e}")
         return signals, findings
 
 # ============================================
@@ -221,7 +221,7 @@ def import_daily_news():
     Aggregates signals from infrastructure and geopolitical monitoring
     """
     print("\n" + "="*60)
-    print("📰 Daily News Headline Scan")
+    print("[NEWS] Daily News Headline Scan")
     print("   Infrastructure incidents & geopolitical events")
     print("="*60)
 
@@ -265,9 +265,9 @@ def import_daily_news():
                 signal['source']
             )
             signal_count += 1
-            print(f"   ✅ Signal: {signal['domain']}")
+            print(f"   [OK] Signal: {signal['domain']}")
         except Exception as e:
-            print(f"   ⚠️  Error adding signal from {signal['domain']}: {e}")
+            print(f"   [WARNING] Error adding signal from {signal['domain']}: {e}")
 
     for finding in all_findings:
         try:
@@ -278,12 +278,12 @@ def import_daily_news():
                 supporting_evidence=finding['evidence']
             )
             finding_count += 1
-            print(f"   ✅ Finding: {finding['mechanism']}")
+            print(f"   [OK] Finding: {finding['mechanism']}")
         except Exception as e:
-            print(f"   ⚠️  Error adding finding: {e}")
+            print(f"   [WARNING] Error adding finding: {e}")
 
     print("\n" + "="*60)
-    print(f"✅ Daily News Headline Scan Complete!")
+    print(f"[OK] Daily News Headline Scan Complete!")
     print(f"   • Signals added: {signal_count}")
     print(f"   • Findings added: {finding_count}")
     print(f"   • Total entries: {signal_count + finding_count}")
