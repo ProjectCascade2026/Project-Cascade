@@ -2696,38 +2696,41 @@ def section_routines():
 
     st.divider()
 
-    # Routine 1: Daily Substack Import
-    st.write("### 📧 Routine 1: Daily Substack Email Import")
+    # Routine 1: Daily Gmail Message Analysis
+    st.write("### [EMAIL] Routine 1: Daily Gmail Message Analysis")
     col1, col2, col3 = st.columns([2, 1, 1])
     with col1:
-        st.write("**Fetch & Extract Research**")
+        st.write("**Analyze All Emails**")
     with col2:
         st.write("Daily")
     with col3:
         st.write("08:00 AM")
 
     st.markdown("""
-    **Data Source:** 10 Substack researchers (Hansen, Hagens, Linehan, Elliott, Prideaux, McGuire, Pearce, Boyd, Revkin, Last Week in Collapse)
+    **Data Source:** All Gmail folders (PRIMARY, UPDATES, custom labels, etc.) - any email containing cascade-relevant keywords
 
     **What It Does:**
     - Connects to Gmail via IMAP
-    - Scans "Substack" folder for new emails
-    - Extracts cascade-relevant signals and findings
-    - Maps to cascade nodes (semiconductors, energy, water, food, geopolitics, etc.)
-    - Organizes research by mechanism
-    - Adds to Research Findings with full source attribution
+    - Scans ALL Gmail folders (not just Substack)
+    - Tracks which messages have been analyzed to avoid duplicates
+    - Extracts cascade-relevant signals from email content using keyword matching
+    - Keywords: grid, water, food, supply chain, energy, semiconductor, port, inflation, climate, geopolitical, sanctions
+    - Maps signals to cascade nodes based on content
+    - Adds Research Findings with source attribution (sender, folder, subject)
 
-    **Status:** ✅ Active and Verified
-    - Script: `import_substack_imap.py`
+    **Cascade Value:** Analyzes comprehensive email research from any source (Substack, work emails, newsletters, etc.), extracting infrastructure-relevant insights without manual work. Tracks analyzed messages to prevent reprocessing.
+
+    **Status:** ✅ Active
+    - Script: `import_substack_imap.py` (refactored for all Gmail)
     - Config: `config.ini` (Gmail credentials, local only, not in git)
-    - Scheduler: Windows Task Scheduler task "Import Substack Emails"
-    - Last Run: Manual test successful (connection verified)
+    - Scheduler: Windows Task Scheduler task "Import Substack Emails" (analyzes all messages)
+    - Database: Tracks analyzed message IDs in `gmail_messages_analyzed` table
     """)
 
     col1, col2, col3 = st.columns([3, 1, 1])
     with col2:
         if st.button("▶️ Run Now", key="run_routine_1"):
-            execute_routine("import_substack_imap.py", "Substack Email Import")
+            execute_routine("import_substack_imap.py", "Gmail Message Analysis")
     with col3:
         st.write("")
 
@@ -2892,8 +2895,11 @@ def section_routines():
     st.markdown("""
     **Your Requests → My Implementation:**
 
-    1. **"Actually using Substack emails to feed research into the dashboard"**
-       → Built `import_substack_imap.py` + Gmail IMAP integration + daily scheduler (Routine 1, 08:00 AM)
+    1. **"Analyze all Gmail messages from all folders, not just Substack"**
+       → Refactored `import_substack_imap.py` to scan ALL Gmail folders (PRIMARY, UPDATES, custom labels)
+       → Added message tracking database to avoid re-analyzing messages
+       → Extracts cascade signals from ANY email using keyword matching
+       → Daily scheduler at 08:00 AM (Routine 1)
 
     2. **"Real-time/ongoing monitoring of critical infrastructure developments globally with cascade implications"**
        → Built daily infrastructure monitoring pipeline (food, commodities, ports, water, grids) at 09:00 AM (Routine 3)
