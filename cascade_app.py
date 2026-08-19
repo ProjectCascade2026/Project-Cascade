@@ -240,15 +240,27 @@ def section_summary():
     st.caption("CASCADE pathways showing real-world activation — documented causal chains")
 
     if cascades_with_signals:
+        # Get all nodes for description building
+        all_nodes = get_all_nodes() or []
+        node_map = {node['node_id']: node['name'] for node in all_nodes}
+
         cascade_display = []
         for cs in cascades_with_signals[:10]:
-            # Create ID with description
-            cascade_id_desc = f"CASCADE {cs['cascade_id']}"
-            if cs.get('description'):
-                cascade_id_desc += f"\n{cs['description']}"
+            # Build cascade description from node sequence
+            cascade_desc = cs.get('description') if cs.get('description') else None
+
+            if not cascade_desc and cs.get('node_sequence'):
+                try:
+                    # Parse node sequence "10->3" into node names
+                    node_ids = cs['node_sequence'].split('->')
+                    node_names = [node_map.get(int(nid.strip()), f"Node {nid}") for nid in node_ids]
+                    cascade_desc = ' → '.join(node_names)
+                except:
+                    cascade_desc = cs['node_sequence']
 
             cascade_display.append({
-                'CASCADE Pathway': cascade_id_desc,
+                'CASCADE #': f"CASCADE {cs['cascade_id']}",
+                'Mechanism': cascade_desc or "—",
                 'Node Chain': cs['node_sequence'],
                 'Real-World Signals': cs['signal_count'] or 0
             })
