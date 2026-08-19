@@ -981,23 +981,6 @@ def section_project_goals():
 
     st.divider()
 
-    st.subheader("Reference Points")
-    ref_points = get_reference_points()
-    if ref_points:
-        # Get latest values for each metric
-        metrics_latest = {}
-        for rp in ref_points:
-            metric = rp['metric_name']
-            if metric not in metrics_latest or rp['date_recorded'] > metrics_latest[metric]['date_recorded']:
-                metrics_latest[metric] = rp
-
-        for metric, data in metrics_latest.items():
-            st.metric(metric, f"{data['value']:.1f}")
-    else:
-        st.info("No reference points recorded yet")
-
-    st.divider()
-
     # Tabs for different views
     tab1, tab2, tab3 = st.tabs(["Active Goals", "Retired Goals", "Add New Goal"])
 
@@ -3028,6 +3011,7 @@ def main():
         st.markdown("---")
 
         sections = [
+            "Summary",
             "Today's Progress",
             "Research Findings",
             "Project Goals",
@@ -3039,7 +3023,6 @@ def main():
             "Global Infrastructure Watch",
             "Policy Gap Analysis",
             "Bifurcation Point",
-            "Summary",
             "System Mechanism Tracker",
             "Amplitude",
             "Cascading Nodes Visualizing",
