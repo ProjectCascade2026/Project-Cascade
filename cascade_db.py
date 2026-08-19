@@ -792,24 +792,6 @@ def update_goal(goal_id, goal_text=None, category=None, notes=None):
 
     conn.close()
 
-def retire_goal(goal_id):
-    """Retire a project goal"""
-    conn = get_connection()
-    c = conn.cursor()
-    c.execute('UPDATE project_goals SET status = ?, retired_date = CURRENT_TIMESTAMP WHERE goal_id = ?',
-              ('retired', goal_id))
-    conn.commit()
-    conn.close()
-
-def activate_goal(goal_id):
-    """Reactivate a project goal"""
-    conn = get_connection()
-    c = conn.cursor()
-    c.execute('UPDATE project_goals SET status = ?, amended_date = CURRENT_TIMESTAMP WHERE goal_id = ?',
-              ('active', goal_id))
-    conn.commit()
-    conn.close()
-
 if __name__ == '__main__':
     init_db()
     print(f"Database initialized at {DB_PATH}")
