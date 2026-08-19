@@ -240,103 +240,162 @@ def section_today_progress():
 
     today_str = datetime.now().strftime('%Y-%m-%d')
 
-    # Get today's research findings (newly discovered cascade mechanisms)
-    from datetime import date as date_class
+    # ============================================
+    # SECTION 1: AUTO-GENERATED SYNTHESIS FROM ROUTINES
+    # ============================================
+    st.subheader("🤖 Auto-Synthesized from 4 Daily Routines")
+
+    # Get today's signals and findings from routines
+    all_signals = get_all_signals()
     all_findings = get_all_findings()
-    todays_findings = [f for f in all_findings if f['date_discovered'] == today_str]
+    todays_signals = [s for s in all_signals if s['date_recorded'][:10] == today_str]
+    todays_findings = [f for f in all_findings if f['date_discovered'][:10] == today_str]
+
+    # Display routine-collected data
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        st.metric("Signals Collected", len(todays_signals))
+    with col2:
+        st.metric("Findings Extracted", len(todays_findings))
+    with col3:
+        st.metric("Mechanisms Activated", len(set(f['mechanism'] for f in todays_findings)))
+
+    if todays_signals:
+        with st.expander("📊 Today's Signals by Source", expanded=False):
+            by_source = {}
+            for s in todays_signals:
+                src = s['source']
+                if src not in by_source:
+                    by_source[src] = []
+                by_source[src].append(s)
+
+            for source, signals in sorted(by_source.items()):
+                st.markdown(f"**{source}** ({len(signals)} signals)")
+                for signal in signals:
+                    severity_color = {'critical': '🔴', 'serious': '🟠', 'warning': '🟡'}.get(signal['severity'], '⚪')
+                    st.caption(f"{severity_color} {signal['domain']}: {signal['description'][:100]}...")
 
     if todays_findings:
-        st.subheader("🔬 Today's Research Findings")
-        st.caption(f"{len(todays_findings)} new cascade mechanism findings discovered")
+        with st.expander("🔬 Today's Research Findings by Mechanism", expanded=False):
+            by_mech = {}
+            for f in todays_findings:
+                mech = f['mechanism']
+                if mech not in by_mech:
+                    by_mech[mech] = []
+                by_mech[mech].append(f)
 
-        # Group by mechanism
-        by_mech = {}
-        for f in todays_findings:
-            mech = f['mechanism']
-            if mech not in by_mech:
-                by_mech[mech] = []
-            by_mech[mech].append(f)
-
-        for mech, findings_list in sorted(by_mech.items()):
-            with st.expander(f"**{mech}** ({len(findings_list)} findings)", expanded=True):
+            for mech, findings_list in sorted(by_mech.items()):
+                st.markdown(f"**{mech}** ({len(findings_list)} findings)")
                 for finding in findings_list:
-                    col1, col2 = st.columns([3, 1])
+                    col1, col2 = st.columns([4, 1])
                     with col1:
-                        st.write(finding['finding_text'])
+                        st.caption(finding['finding_text'][:150])
                     with col2:
-                        st.metric("Confidence", f"{finding['confidence_level']:.0%}")
-                    if finding['supporting_evidence']:
-                        st.caption(f"📍 {finding['supporting_evidence']}")
-                    st.divider()
+                        st.metric("Confidence", f"{finding['confidence_level']:.0%}", label_visibility="collapsed")
 
-        st.markdown("---")
+    st.divider()
 
-    # Get daily findings
-    findings_data = get_daily_findings(today_str)
+    # ============================================
+    # SECTION 2: MANUAL CAPTURE FROM CHAT/SESSIONS
+    # ============================================
+    st.subheader("✍️ Add Finding from This Session")
+    st.caption("Capture theoretical advances, methodological insights, or key realizations from your work")
 
-    # Determine if finding is from news scan
-    def is_news_scan_item(text):
-        return 'HEADLINE NEWS SCAN' in text or any(
-            pattern in text for pattern in [
-                'UCS Report:', 'The Ecologist:', 'UN/', 'Green Climate Fund:',
-                'Oxfam:', 'Ocean monitoring:', 'Satellite gap:', 'Data gaps:',
-                'Canada:', 'UK:'
-            ]
+    with st.expander("📝 Quick Capture Form", expanded=False):
+        col1, col2 = st.columns([2, 1])
+
+        with col1:
+            new_finding = st.text_area(
+                "Theoretical Advance or Key Finding",
+                placeholder="E.g., Goal-driven architecture eliminates keyword brittleness and auto-adapts to scope changes",
+                height=80,
+                key="new_finding"
+            )
+
+        with col2:
+            finding_type = st.selectbox(
+                "Type",
+                ["Theoretical Advance", "Methodological Insight", "System Discovery"],
+                key="finding_type"
+            )
+
+        new_insight = st.text_area(
+            "Methodological Insight (optional)",
+            placeholder="E.g., Four-routine pipeline ensures multi-source convergence before signal elevation",
+            height=60,
+            key="new_insight"
         )
 
-    if findings_data:
-        st.subheader("Daily Overview")
-        st.markdown(findings_data['overview'])
+        if st.button("💾 Save Finding", type="primary"):
+            if new_finding.strip():
+                # Load existing daily findings
+                findings_data = get_daily_findings(today_str)
 
-        st.divider()
+                if findings_data:
+                    # Update existing entry
+                    existing_advances = json.loads(findings_data['theoretical_advances'] or '[]')
+                    existing_insights = json.loads(findings_data['methodological_insights'] or '[]')
+                    existing_findings = json.loads(findings_data['findings'] or '[]')
+                else:
+                    existing_advances = []
+                    existing_insights = []
+                    existing_findings = []
 
-        # Findings
-        if findings_data['findings']:
-            st.subheader("📍 Findings")
-            findings_list = json.loads(findings_data['findings'])
-            if findings_list:
-                for finding in findings_list:
-                    if is_news_scan_item(finding):
-                        st.markdown(f'<div class="highlight-recent">• <strong>{finding}</strong></div>', unsafe_allow_html=True)
-                    else:
-                        st.markdown(f"• {finding}")
+                # Add new entries
+                existing_advances.append(f"[{finding_type}] {new_finding}")
+                if new_insight.strip():
+                    existing_insights.append(new_insight)
+
+                # Save to database
+                from cascade_db import add_or_update_daily_findings
+                overview = f"Today's synthesis: {len(todays_signals)} signals, {len(todays_findings)} findings, {len(existing_advances)} manual advances"
+                add_or_update_daily_findings(
+                    today_str,
+                    overview,
+                    json.dumps(existing_findings),
+                    json.dumps(existing_insights),
+                    json.dumps(existing_advances)
+                )
+
+                st.success("Finding saved! Reloading...")
+                st.rerun()
             else:
-                st.info("No findings recorded yet today")
+                st.error("Please enter a finding")
 
-        st.divider()
+    st.divider()
+
+    # ============================================
+    # SECTION 3: TODAY'S DAILY FINDINGS SUMMARY
+    # ============================================
+    findings_data = get_daily_findings(today_str)
+
+    if findings_data:
+        st.subheader("📋 Today's Complete Summary")
+
+        # Overview
+        if findings_data['overview']:
+            st.markdown(f"**Overview**: {findings_data['overview']}")
+
+        # Theoretical Advances
+        if findings_data['theoretical_advances']:
+            advances_list = json.loads(findings_data['theoretical_advances'])
+            if advances_list:
+                st.subheader("🧠 Theoretical Advances")
+                for advance in advances_list:
+                    st.markdown(f'<div class="highlight-recent">• <strong>{advance}</strong></div>', unsafe_allow_html=True)
 
         # Methodological Insights
         if findings_data['methodological_insights']:
-            st.subheader("🔧 Methodological Insights")
             insights_list = json.loads(findings_data['methodological_insights'])
             if insights_list:
+                st.subheader("🔧 Methodological Insights")
                 for insight in insights_list:
                     st.markdown(f"• {insight}")
-            else:
-                st.info("No methodological insights recorded yet")
 
-        st.divider()
-
-        # Theoretical Model Advances
-        if findings_data['theoretical_advances']:
-            st.subheader("🧠 Theoretical Model Advances")
-            advances_list = json.loads(findings_data['theoretical_advances'])
-            if advances_list:
-                for advance in advances_list:
-                    if 'CONFIRMED' in advance or 'NEW INSTANCE' in advance or 'Node' in advance[:20]:
-                        st.markdown(f'<div class="highlight-recent">• <strong>{advance}</strong></div>', unsafe_allow_html=True)
-                    else:
-                        st.markdown(f"• {advance}")
-            else:
-                st.info("No theoretical advances recorded yet")
-
-        st.divider()
-
-        # Timestamp
         st.caption(f"📝 Last updated: {findings_data['last_updated']}")
-
     else:
-        st.info(f"No daily findings recorded for {today_str}. Add entries to `daily_findings.md` to get started.")
+        if not todays_signals and not todays_findings:
+            st.info("No signals or findings collected yet today. Routines will populate this automatically when they run.")
 
 # ============================================
 # 3. AMPLITUDE (formerly 4)
