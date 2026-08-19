@@ -83,7 +83,7 @@ def metric_card(label, value, trend=None, color="#3987e5"):
 # 1. SUMMARY
 # ============================================
 def section_summary():
-    st.header("📋 Project Summary — System Health Dashboard")
+    st.header("📋 Planetary Degradation Monitor")
 
     # Get all data
     metrics = get_metrics_summary()
