@@ -83,30 +83,34 @@ def metric_card(label, value, trend=None, color="#3987e5"):
 # 1. SUMMARY
 # ============================================
 def section_summary():
-    st.header("📋 Planetary Degradation Monitor")
+    st.header("Planetary Degradation Monitor")
 
-    # Get all data
-    metrics = get_metrics_summary()
-    nodes_by_activity = get_nodes_by_activity()
-    cascades_with_signals = get_cascade_sequences_with_signals()
-    hotspots = get_geographic_hotspots()
-    reference_points = get_all_reference_points_latest()
+    try:
+        # Get all data with safe handling
+        metrics = get_metrics_summary() or {}
+        nodes_by_activity = get_nodes_by_activity() or []
+        cascades_with_signals = get_cascade_sequences_with_signals() or []
+        hotspots = get_geographic_hotspots() or []
+        reference_points = get_all_reference_points_latest() or []
 
-    # Executive Summary Metrics (Top Row)
-    col1, col2, col3, col4, col5 = st.columns(5)
+        # Executive Summary Metrics (Top Row)
+        col1, col2, col3, col4, col5 = st.columns(5)
 
-    with col1:
-        st.metric("Total Signals", metrics['total_signals'])
-    with col2:
-        active_count = len([n for n in nodes_by_activity if n['signal_count'] and n['signal_count'] > 0])
-        st.metric("Active Nodes", active_count)
-    with col3:
-        st.metric("CASCADE Sequences", metrics['cascade_sequences'])
-    with col4:
-        st.metric("Geographic Hotspots", len(hotspots))
-    with col5:
-        robustness = next((rp['value'] for rp in reference_points if 'Robustness' in rp['metric_name']), 0)
-        st.metric("System Robustness", f"{robustness:.0f}%")
+        with col1:
+            st.metric("Total Signals", metrics.get('total_signals', 0))
+        with col2:
+            active_count = len([n for n in nodes_by_activity if n.get('signal_count') and n['signal_count'] > 0])
+            st.metric("Active Nodes", active_count)
+        with col3:
+            st.metric("CASCADE Sequences", metrics.get('cascade_sequences', 0))
+        with col4:
+            st.metric("Geographic Hotspots", len(hotspots))
+        with col5:
+            robustness = next((rp.get('value', 0) for rp in reference_points if rp and 'Robustness' in rp.get('metric_name', '')), 0)
+            st.metric("System Robustness", f"{robustness:.0f}%")
+
+    except Exception as e:
+        st.error(f"Error loading summary metrics: {str(e)}")
 
     st.divider()
 
