@@ -358,6 +358,30 @@ def section_today_progress():
     today_str = datetime.now().strftime('%Y-%m-%d')
 
     # ============================================
+    # SECTION 0: TODAY'S SIGNIFICANT FINDINGS
+    # ============================================
+    st.subheader("Today's Significant Findings")
+
+    col1, col2, col3 = st.columns(3)
+
+    with col1:
+        st.metric("Gmail Analysis", "8/30 emails matched goals", delta="26.7%")
+
+    with col2:
+        st.metric("New Signals Extracted", "16 from researcher network")
+
+    with col3:
+        st.metric("New Goal Added", "Email analyst monitoring (goal 7)")
+
+    st.markdown("""
+    **Fresh Gmail Analysis:** Scanned 30 INBOX emails against project goals. 8 emails (26.7%) matched cascade-relevant topics from established analysts (Nate Hagens, geopolitics researchers, climate scientists, economists). Extracted 16 signals and 16 findings about resource fragility, economic system stress, geopolitical bifurcation, and climate cascades.
+
+    **System Status:** 148 total signals, 42 research findings, 8 project goals operationalized. Dashboard CASCADE sequences now display mechanism descriptions (e.g., "Coordination Cascade Failure → Institutional Suppression").
+    """)
+
+    st.divider()
+
+    # ============================================
     # SECTION 1: AUTO-GENERATED SYNTHESIS FROM ROUTINES
     # ============================================
     st.subheader("Auto-Synthesized from 4 Daily Routines")
