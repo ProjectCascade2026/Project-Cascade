@@ -1,0 +1,57 @@
+# Database
+cascade_data.db
+*.db
+*.sqlite
+
+# Credentials & Secrets (CRITICAL - Never commit these)
+credentials.json
+token.pickle
+config.ini
+*.ini
+.env
+.env.local
+.env.*.local
+secrets.toml
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Streamlit
+.streamlit/secrets.toml
+.streamlit/cache/
+.streamlit/*.toml
+
+# Launcher script (local only)
+launcher.py
+
+# IDE & Editor temp files
+*.sublime-project
+*.sublime-workspace
+.DS_Store
+.AppleDouble
+.LSOverride
+*.log
+
+# Compiled files
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
