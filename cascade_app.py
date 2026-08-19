@@ -242,11 +242,15 @@ def section_summary():
     if cascades_with_signals:
         cascade_display = []
         for cs in cascades_with_signals[:10]:
+            # Create ID with description
+            cascade_id_desc = f"CASCADE {cs['cascade_id']}"
+            if cs.get('description'):
+                cascade_id_desc += f"\n{cs['description']}"
+
             cascade_display.append({
-                'ID': f"CASCADE {cs['cascade_id']}",
+                'CASCADE Pathway': cascade_id_desc,
                 'Node Chain': cs['node_sequence'],
-                'Real-World Signals': cs['signal_count'] or 0,
-                'Confidence': f"{cs['confidence']:.0%}" if cs['confidence'] else "—"
+                'Real-World Signals': cs['signal_count'] or 0
             })
 
         cascade_df = pd.DataFrame(cascade_display)
