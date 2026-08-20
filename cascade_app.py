@@ -2386,6 +2386,11 @@ def section_global_infrastructure_watch():
 # CONTINUE: RESEARCH FINDINGS DETAILS
 # ============================================
 
+    # Retrieve all findings from database
+    all_findings = get_all_findings()
+    today_str = datetime.today().isoformat()
+    project_findings = [f for f in all_findings if f['date_discovered'] != today_str]
+
     mechanisms = list(set([f['mechanism'] for f in project_findings])) if project_findings else []
     mechanisms.sort()
 
