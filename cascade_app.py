@@ -227,11 +227,11 @@ def section_summary():
 
         node_df = pd.DataFrame(node_display)
 
-        # Configure columns for width and alignment
+        # Configure columns for width
         col_config = {
             'Node': st.column_config.TextColumn(width='small'),
             'Mechanism': st.column_config.TextColumn(width='medium'),
-            'Signals': st.column_config.NumberColumn(width='small', alignment='left')
+            'Signals': st.column_config.NumberColumn(width='small')
         }
 
         st.dataframe(node_df, column_config=col_config, hide_index=True, use_container_width=True)
