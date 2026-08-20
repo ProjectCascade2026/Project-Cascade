@@ -452,76 +452,7 @@ def section_today_progress():
     st.divider()
 
     # ============================================
-    # SECTION 2: MANUAL CAPTURE FROM CHAT/SESSIONS
-    # ============================================
-    st.subheader("Add Finding from This Session")
-    st.caption("Capture theoretical advances, methodological insights, or key realizations from your work")
-
-    with st.expander("Quick Capture Form", expanded=False):
-        col1, col2 = st.columns([2, 1])
-
-        with col1:
-            new_finding = st.text_area(
-                "Theoretical Advance or Key Finding",
-                placeholder="E.g., Goal-driven architecture eliminates keyword brittleness and auto-adapts to scope changes",
-                height=80,
-                key="new_finding"
-            )
-
-        with col2:
-            finding_type = st.selectbox(
-                "Type",
-                ["Theoretical Advance", "Methodological Insight", "System Discovery"],
-                key="finding_type"
-            )
-
-        new_insight = st.text_area(
-            "Methodological Insight (optional)",
-            placeholder="E.g., Four-routine pipeline ensures multi-source convergence before signal elevation",
-            height=60,
-            key="new_insight"
-        )
-
-        if st.button("Save Finding", type="primary"):
-            if new_finding.strip():
-                # Load existing daily findings
-                findings_data = get_daily_findings(today_str)
-
-                if findings_data:
-                    # Update existing entry
-                    existing_advances = json.loads(findings_data['theoretical_advances'] or '[]')
-                    existing_insights = json.loads(findings_data['methodological_insights'] or '[]')
-                    existing_findings = json.loads(findings_data['findings'] or '[]')
-                else:
-                    existing_advances = []
-                    existing_insights = []
-                    existing_findings = []
-
-                # Add new entries
-                existing_advances.append(f"[{finding_type}] {new_finding}")
-                if new_insight.strip():
-                    existing_insights.append(new_insight)
-
-                # Save to database
-                from cascade_db import add_or_update_daily_findings
-                overview = f"Today's synthesis: {len(todays_signals)} signals, {len(todays_findings)} findings, {len(existing_advances)} manual advances"
-                add_or_update_daily_findings(
-                    today_str,
-                    overview,
-                    json.dumps(existing_findings),
-                    json.dumps(existing_insights),
-                    json.dumps(existing_advances)
-                )
-
-                st.success("Finding saved! Reloading...")
-                st.rerun()
-            else:
-                st.error("Please enter a finding")
-
-    st.divider()
-
-    # ============================================
-    # SECTION 3: TODAY'S DAILY FINDINGS SUMMARY
+    # TODAY'S DAILY FINDINGS SUMMARY
     # ============================================
     findings_data = get_daily_findings(today_str)
 
