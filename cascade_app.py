@@ -212,8 +212,8 @@ def section_summary():
     st.divider()
 
     # Section 1: Top Activated Nodes (Ranked by Signal Count & Severity)
-    st.subheader("Top Activated Cascade Nodes")
-    st.caption("Ranked by signal frequency and severity — nodes with greatest real-world activation")
+    st.subheader("Cascade Mechanisms Under Activation")
+    st.caption("Ranked by signal frequency — system vulnerabilities with real-world evidence")
 
     active_nodes = [n for n in nodes_by_activity if n['signal_count'] and n['signal_count'] > 0]
     if active_nodes:
@@ -226,7 +226,15 @@ def section_summary():
             })
 
         node_df = pd.DataFrame(node_display)
-        st.dataframe(node_df, width='stretch', hide_index=True)
+
+        # Configure columns for width and alignment
+        col_config = {
+            'Node': st.column_config.TextColumn(width='small'),
+            'Mechanism': st.column_config.TextColumn(width='medium'),
+            'Signals': st.column_config.NumberColumn(width='small', alignment='left')
+        }
+
+        st.dataframe(node_df, column_config=col_config, hide_index=True, use_container_width=True)
     else:
         st.info("No active nodes currently being tracked")
 
