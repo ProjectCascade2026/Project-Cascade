@@ -222,10 +222,7 @@ def section_summary():
             node_display.append({
                 'Node': f"Node {node['node_id']}",
                 'Mechanism': node['name'],
-                'Signals': node['signal_count'] or 0,
-                'Severity': node['severity_score'] or 0,
-                'Amplitude': f"{node['amplitude']:.1f}" if node['amplitude'] else "—",
-                'Frequency': f"{node['frequency']:.1f}" if node['frequency'] else "—"
+                'Signals': node['signal_count'] or 0
             })
 
         node_df = pd.DataFrame(node_display)
