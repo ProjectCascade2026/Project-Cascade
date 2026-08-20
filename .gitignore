@@ -3,15 +3,16 @@ cascade_data.db
 *.db
 *.sqlite
 
-# Credentials & Secrets (CRITICAL - Never commit these)
-credentials.json
-token.pickle
+# Credentials & Secrets
 config.ini
-*.ini
 .env
 .env.local
-.env.*.local
-secrets.toml
+credentials.json
+token.pickle
+secrets.yaml
+
+# Configuration (use templates instead)
+cascade_config.json
 
 # Python
 __pycache__/
@@ -21,37 +22,34 @@ __pycache__/
 .Python
 env/
 venv/
+ENV/
 .venv
 
-# IDEs
+# Streamlit
+.streamlit/
+.streamlit/secrets.toml
+
+# IDE
 .vscode/
 .idea/
 *.swp
 *.swo
+*~
 
 # OS
 .DS_Store
 Thumbs.db
-
-# Streamlit
-.streamlit/secrets.toml
-.streamlit/cache/
-.streamlit/*.toml
-
-# Launcher script (local only)
-launcher.py
-
-# IDE & Editor temp files
-*.sublime-project
-*.sublime-workspace
-.DS_Store
 .AppleDouble
 .LSOverride
-*.log
 
-# Compiled files
-*.pyc
-*.pyo
-*.egg-info/
-dist/
-build/
+# Logs
+*.log
+*.pot
+
+# Research/Backup files (keep local, don't commit)
+*.backup
+*_old.py
+cascade_backup*/
+
+# Node modules (if using any JS tools)
+node_modules/

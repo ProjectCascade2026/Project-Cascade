@@ -291,15 +291,18 @@ def get_metrics_summary():
     c = conn.cursor()
 
     total_signals = c.execute('SELECT COUNT(*) FROM signals').fetchone()[0]
-    active_nodes = c.execute('SELECT COUNT(*) FROM cascade_nodes WHERE status = "active"').fetchone()[0]
+    # Count nodes that have at least one signal
+    active_nodes = c.execute('SELECT COUNT(DISTINCT node_id) FROM signals').fetchone()[0]
     cascade_sequences = c.execute('SELECT COUNT(*) FROM cascade_sequences').fetchone()[0]
+    total_findings = c.execute('SELECT COUNT(*) FROM research_findings').fetchone()[0]
 
     conn.close()
 
     return {
         'total_signals': total_signals,
         'active_nodes': active_nodes,
-        'cascade_sequences': cascade_sequences
+        'cascade_sequences': cascade_sequences,
+        'total_findings': total_findings
     }
 
 def get_daily_findings(date_str=None):

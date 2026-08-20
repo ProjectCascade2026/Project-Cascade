@@ -26,6 +26,24 @@ from cascade_db import (
 import json
 
 # ============================================
+# Load Configuration (Account Switching)
+# ============================================
+def load_cascade_config():
+    """Load configuration from cascade_config.json for account switching"""
+    config_path = os.path.join(os.path.dirname(__file__), 'cascade_config.json')
+    try:
+        with open(config_path, 'r') as f:
+            return json.load(f)
+    except Exception as e:
+        st.error(f"⚠️ Could not load cascade_config.json: {e}")
+        return None
+
+# Load config at startup
+CASCADE_CONFIG = load_cascade_config()
+ACTIVE_ACCOUNT = CASCADE_CONFIG.get('mcp_authentication', {}).get('account_email', 'unknown') if CASCADE_CONFIG else 'unknown'
+FALLBACK_ACCOUNT = CASCADE_CONFIG.get('google_account', {}).get('fallback_account', 'unknown') if CASCADE_CONFIG else 'unknown'
+
+# ============================================
 # Initialize Project Goals (Session 7)
 # ============================================
 @st.cache_resource
@@ -151,18 +169,20 @@ def section_summary():
         reference_points = get_all_reference_points_latest() or []
 
         # Executive Summary Metrics (Top Row)
-        col1, col2, col3, col4, col5 = st.columns(5)
+        col1, col2, col3, col4, col5, col6 = st.columns(6)
 
         with col1:
             st.metric("Total Signals", metrics.get('total_signals', 0))
         with col2:
+            st.metric("Total Findings", metrics.get('total_findings', 0))
+        with col3:
             active_count = len([n for n in nodes_by_activity if n.get('signal_count') and n['signal_count'] > 0])
             st.metric("Active Nodes", active_count)
-        with col3:
-            st.metric("CASCADE Sequences", metrics.get('cascade_sequences', 0))
         with col4:
-            st.metric("Geographic Hotspots", len(hotspots))
+            st.metric("CASCADE Sequences", metrics.get('cascade_sequences', 0))
         with col5:
+            st.metric("Geographic Hotspots", len(hotspots))
+        with col6:
             robustness = next((rp.get('value', 0) for rp in reference_points if rp and 'Robustness' in rp.get('metric_name', '')), 0)
             st.metric("System Robustness", f"{robustness:.0f}%")
 
@@ -379,9 +399,9 @@ def section_today_progress():
         st.metric("New Goal Added", "Email analyst monitoring (goal 7)")
 
     st.markdown("""
-    **Fresh Gmail Analysis:** Scanned 30 INBOX emails against project goals. 8 emails (26.7%) matched cascade-relevant topics from established analysts (Nate Hagens, geopolitics researchers, climate scientists, economists). Extracted 16 signals and 16 findings about resource fragility, economic system stress, geopolitical bifurcation, and climate cascades.
+    **Research Integration Complete:** James Hansen Super-Duper El Niño research (April 15, 2026) integrated into cascade database. 8 new signals and 6 new findings added across Nodes 0, 1, 3, 4, 11. Key insight: Super El Niño + warming synergy may accelerate bifurcation timeline by 12-18 months.
 
-    **System Status:** 148 total signals, 42 research findings, 8 project goals operationalized. Dashboard CASCADE sequences now display mechanism descriptions (e.g., "Coordination Cascade Failure → Institutional Suppression").
+    **System Status:** 180 total signals, 60 research findings, 7 project goals operationalized. Cascade now tracks measurement system superiority (upper 300m ocean heat vs. Nino3.4), Kelvin wave predictability, and bifurcation amplification via Super El Niño mechanism.
     """)
 
     st.divider()
@@ -891,7 +911,7 @@ def section_system_mechanism_tracker():
     # KEY METRICS ROW
     col1, col2, col3, col4 = st.columns(4)
     with col1:
-        st.metric("Total Signals", metrics['total_signals'], "+20 since Aug 17")
+        st.metric("Total Signals", metrics['total_signals'], "+22 since Aug 17")
     with col2:
         active_count = len([n for n in nodes_by_activity if n['status'] == 'active'])
         st.metric("Active Mechanisms", f"{active_count}/13", "Nodes 3,4,5,6,7,11,13")
